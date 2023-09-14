@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uid       String   @id @default(uuid())
+  id        String   @unique
+  role      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model AcademicSemester {
+  id         String   @id @default(uuid())
+  title      String
+  year       String
+  code       String
+  startMonth String
+  endMonth   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("academic_semesters")
+}
+
+model AcademicFaculty {
+  id        String   @id @default(uuid())
+  title     String
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("academic_faculties")
+}
