@@ -1,8 +1,8 @@
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Student, User } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
-import { generateUserId } from './user.utils';
+import { generateStudentId } from './user.utils';
 import config from '../../../config';
 import { IUserFilterRequest } from './user.interface';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -10,14 +10,22 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { userSearchableFields } from './user.constant';
 
-const createUser = async (data: User): Promise<User | null> => {
-  // generate user id
-  const id = await generateUserId();
+const createStudent = async (
+  student: Student,
+  data: User
+): Promise<User | null> => {
+  console.log(student);
 
+  const sem = {
+    code: `01`,
+    year: `2025`,
+  };
+
+  // generate user id
+  const id = await generateStudentId(sem);
   data.id = id;
 
   // default password
-
   if (!data.password) {
     data.password = config.default_user_pass as string;
   }
@@ -97,4 +105,4 @@ const bulkDelete = async () => {
   return result;
 };
 
-export const UserService = { createUser, bulkDelete, getAllUsers };
+export const UserService = { createStudent, bulkDelete, getAllUsers };

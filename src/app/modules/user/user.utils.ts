@@ -1,6 +1,5 @@
+import { AcademicSemester } from '@prisma/client';
 import prisma from '../../../shared/prisma';
-
-
 
 //User ID
 export const findLastUserId = async (): Promise<string | undefined> => {
@@ -37,23 +36,10 @@ export const findLastStudentId = async (): Promise<string | undefined> => {
 export const generateStudentId = async (
   academicSemester: any
 ): Promise<string> => {
-  const currentId = (
-    await prisma.user.findFirst({
-      where: {
-        role: 'student',
-      },
-      select: {
-        id: true,
-      },
-      orderBy: {
-        id: 'desc',
-      },
-    })
-  )?.id;
+  const currentId = (await findLastStudentId()) || '00000';
 
-  const lastStudentId = currentId || '00000';
+  let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
 
-  let incrementedId = (parseInt(lastStudentId) + 1).toString().padStart(5, '0');
   incrementedId = `${academicSemester.year.substring(2)}${
     academicSemester.code
   }${incrementedId}`;
@@ -81,12 +67,13 @@ export const findLastFacultyId = async (): Promise<string | undefined> => {
 export const generateFacultyId = async (): Promise<string> => {
   const currentId = (await findLastFacultyId()) || '00000';
 
+  // increment by 1
   let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
+
   incrementedId = `F-${incrementedId}`;
 
   return incrementedId;
 };
-
 // Admin ID
 export const findLastAdminId = async (): Promise<string | undefined> => {
   const lastAdmin = await prisma.user.findFirst({

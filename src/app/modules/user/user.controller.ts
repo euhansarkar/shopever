@@ -6,8 +6,10 @@ import pick from '../../../shared/pick';
 import { paginationFields } from '../../../constants/pagination';
 import { userFilterableFields } from './user.constant';
 
-const createUser = catchAsync(async (req, res) => {
-  const result = await UserService.createUser(req.body);
+const createStudent = catchAsync(async (req, res) => {
+  const { student, ...userData } = req.body;
+
+  const result = await UserService.createStudent(student, userData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -40,4 +42,4 @@ const bulkDelete = catchAsync(async (req, res) => {
   });
 });
 
-export const UserController = { createUser, bulkDelete, getAllUsers };
+export const UserController = { createStudent, bulkDelete, getAllUsers };

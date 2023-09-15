@@ -4,8 +4,10 @@ const router = express.Router();
 
 router
   .route(`/`)
-  .post(UserController.createUser)
+  .post(UserController.createStudent)
   .delete(UserController.bulkDelete)
   .get(UserController.getAllUsers);
+
+router.route(`/create-customer`).post(UserController.createStudent);
 
 export const UserRouter = router;

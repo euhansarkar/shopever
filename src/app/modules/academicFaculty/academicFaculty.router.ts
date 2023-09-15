@@ -9,6 +9,13 @@ router
   .post(
     validateRequest(AcademicFacultyValidator.create),
     AcademicFacultyController.createAcademicFaculty
-  );
+  )
+  .get(AcademicFacultyController.getAllAcademicFaculties);
+
+router
+  .route(`/:id`)
+  .get(AcademicFacultyController.getAcademicFaculty)
+  .patch(AcademicFacultyController.updateAcademicFaculty)
+  .delete(AcademicFacultyController.deleteAcademicFaculty);
 
 export const AcademicFacultyRouter = router;
