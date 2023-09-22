@@ -7,9 +7,15 @@ import { paginationFields } from '../../../constants/pagination';
 import { userFilterableFields } from './user.constant';
 
 const createStudent = catchAsync(async (req, res) => {
-  const { student, ...userData } = req.body;
+  const { name, student, guardian, localGuardian, ...studentData } = req.body;
 
-  const result = await UserService.createStudent(student, userData);
+  const result = await UserService.createStudent(
+    name,
+    student,
+    guardian,
+    localGuardian,
+    studentData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -19,27 +25,23 @@ const createStudent = catchAsync(async (req, res) => {
   });
 });
 
-const getAllUsers = catchAsync(async (req, res) => {
-  const filters = pick(req.query, userFilterableFields);
-  const options = pick(req.query, paginationFields);
-  const result = await UserService.getAllUsers(filters, options);
+const createFaculty = catchAsync(async (req, res) => {
+  const { name, student, guardian, localGuardian, ...studentData } = req.body;
+
+  const result = await UserService.createStudent(
+    name,
+    student,
+    guardian,
+    localGuardian,
+    studentData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `all users found`,
+    message: `user created`,
     data: result,
   });
 });
 
-const bulkDelete = catchAsync(async (req, res) => {
-  const result = await UserService.bulkDelete();
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: `users bulk deleted`,
-    data: result,
-  });
-});
-
-export const UserController = { createStudent, bulkDelete, getAllUsers };
+export const UserController = { createStudent, createFaculty };

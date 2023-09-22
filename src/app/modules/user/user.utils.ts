@@ -74,6 +74,8 @@ export const generateFacultyId = async (): Promise<string> => {
 
   return incrementedId;
 };
+
+
 // Admin ID
 export const findLastAdminId = async (): Promise<string | undefined> => {
   const lastAdmin = await prisma.user.findFirst({

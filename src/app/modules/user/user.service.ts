@@ -1,108 +1,161 @@
-import { Prisma, Student, User } from '@prisma/client';
+import {
+  Faculty,
+  Guardian,
+  LocalGuardian,
+  Name,
+  Prisma,
+  Student,
+  User,
+} from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
-import { generateStudentId } from './user.utils';
+import { generateFacultyId, generateStudentId } from './user.utils';
 import config from '../../../config';
-import { IUserFilterRequest } from './user.interface';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { userSearchableFields } from './user.constant';
 
 const createStudent = async (
-  student: Student,
-  data: User
-): Promise<User | null> => {
-  console.log(student);
+  nameData: Name,
+  studentData: Student,
+  guardianData: Guardian,
+  localGuardianData: LocalGuardian,
+  userData: User
+): Promise<{ message: string }> => {
+  await prisma.$transaction(async transectionClient => {
+    // set role
+    userData.role = `student`;
 
-  const sem = {
-    code: `01`,
-    year: `2025`,
-  };
+    // default password
+    if (!userData.password) {
+      userData.password = config.default_student_pass as string;
+    }
 
-  // generate user id
-  const id = await generateStudentId(sem);
-  data.id = id;
-
-  // default password
-  if (!data.password) {
-    data.password = config.default_user_pass as string;
-  }
-
-  const result = await prisma.user.create({
-    data,
-  });
-
-  // if failed to create user
-  if (!result) {
-    throw new ApiError(httpStatus.OK, `failed to create new user`);
-  }
-
-  return result;
-};
-
-const getAllUsers = async (
-  filters: IUserFilterRequest,
-  options: IPaginationOptions
-): Promise<IGenericResponse<User[]>> => {
-  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
-  const { searchTerm, ...filterData } = filters;
-
-  const andConditions = [];
-
-  if (searchTerm) {
-    andConditions.push({
-      OR: userSearchableFields.map(field => ({
-        [field]: {
-          contains: searchTerm,
-          mode: 'insensitive',
+    //academic semester find
+    const academicSemester =
+      await transectionClient.academicSemester.findUnique({
+        where: {
+          id: studentData.academicSemesterId,
         },
-      })),
+      });
+
+    // generate user id
+    const id = await generateStudentId(academicSemester);
+    studentData.id = id;
+
+    // name creation
+    const name = await transectionClient.name.create({
+      data: nameData,
     });
-  }
 
-  if (Object.keys(filterData).length > 0) {
-    andConditions.push({
-      AND: Object.keys(filterData).map(key => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+    // guardian creation
+    const guardian = await transectionClient.guardian.create({
+      data: guardianData,
     });
-  }
 
-  const whereConditions: Prisma.UserWhereInput =
-    andConditions.length > 0 ? { AND: andConditions } : {};
+    // local guardian creation
+    const localGuardian = await transectionClient.localGuardian.create({
+      data: localGuardianData,
+    });
 
-  const result = await prisma.user.findMany({
-    where: whereConditions,
-    skip,
-    take: limit,
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? { [options.sortBy]: options.sortOrder }
-        : {
-            createdAt: 'desc',
+    // push name, guardian, local guardian id to student table
+    studentData.nameId = name.id;
+    studentData.guardianId = guardian.id;
+    studentData.localGuardianId = localGuardian.id;
+
+    const studentCreation = await transectionClient.student.create({
+      data: studentData,
+    });
+
+    // if failed to create user
+    if (!studentCreation) {
+      throw new ApiError(httpStatus.OK, `failed to create new student`);
+    }
+
+    // student id passs to the user table
+    userData.studentId = studentCreation.uid;
+    userData.id = studentCreation.id;
+
+    const userCreation = await transectionClient.user.create({
+      data: userData,
+      include: {
+        student: {
+          include: {
+            name: true,
+            guardian: true,
+            localGuardian: true,
+            academicDepartment: true,
+            academicSemester: true,
+            academicFaculty: true,
           },
-  });
-  const total = await prisma.user.count({
-    where: whereConditions,
+        },
+      },
+    });
+
+    if (!userCreation) {
+      throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
+    }
   });
 
-  return {
-    meta: {
-      total,
-      page,
-      limit,
-    },
-    data: result,
-  };
+  return { message: `user created successfully` };
 };
 
-const bulkDelete = async () => {
-  const result = await prisma.user.deleteMany({});
-  return result;
+const createFaculty = async (
+  nameData: Name,
+  facultyData: Faculty,
+  userData: User
+): Promise<{ message: string }> => {
+  await prisma.$transaction(async transectionClient => {
+    // set role
+    userData.role = `faculty`;
+
+    // default password
+    if (!userData.password) {
+      userData.password = config.default_student_pass as string;
+    }
+
+    // generate user id
+    const id = await generateFacultyId();
+    facultyData.id = id;
+
+    // name creation
+    const name = await transectionClient.name.create({
+      data: nameData,
+    });
+
+    // push name, guardian, local guardian id to student table
+    facultyData.nameId = name.id;
+
+    const facultyCreation = await transectionClient.faculty.create({
+      data: facultyData,
+    });
+
+    // if failed to create user
+    if (!facultyCreation) {
+      throw new ApiError(httpStatus.OK, `failed to create new faculty`);
+    }
+
+    // student id passs to the user table
+    userData.facultyId = facultyCreation.uid;
+    userData.id = facultyCreation.id;
+
+    const userCreation = await transectionClient.user.create({
+      data: userData,
+      include: {
+        student: {
+          include: {
+            name: true,
+            academicDepartment: true,
+            academicFaculty: true,
+          },
+        },
+      },
+    });
+
+    if (!userCreation) {
+      throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
+    }
+  });
+
+  return { message: `user created successfully` };
 };
 
-export const UserService = { createStudent, bulkDelete, getAllUsers };
+export const UserService = { createStudent, createFaculty };
