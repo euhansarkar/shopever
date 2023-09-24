@@ -3,65 +3,65 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { CountryFilterableFields } from './country.constant';
-import { CountryService } from './country.service';
+import { AmenityFilterableFields } from './amenity.constant';
+import { AmenityService } from './amenity.service';
 
 const createOne = catchAsync(async (req, res) => {
-  const result = await CountryService.createOne(req.body);
+  const result = await AmenityService.createOne(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `country created`,
+    message: `Amenity created`,
     data: result,
   });
 });
 
 const getAll = catchAsync(async (req, res) => {
-  const filters = pick(req.query, CountryFilterableFields);
+  const filters = pick(req.query, AmenityFilterableFields);
   const options = pick(req.query, paginationFields);
 
-  const result = await CountryService.getAll(filters, options);
+  const result = await AmenityService.getAll(filters, options);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `all country found`,
+    message: `all Amenity found`,
     data: result,
   });
 });
 
 const getOne = catchAsync(async (req, res) => {
-  const result = await CountryService.getOne(req.params.id);
+  const result = await AmenityService.getOne(req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `country found`,
+    message: `Amenity found`,
     data: result,
   });
 });
 
 const updateOne = catchAsync(async (req, res) => {
-  const result = await CountryService.updateOne(req.params.id, req.body);
+  const result = await AmenityService.updateOne(req.params.id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `country updated`,
+    message: `Amenity updated`,
     data: result,
   });
 });
 
 const deleteOne = catchAsync(async (req, res) => {
-  const result = await CountryService.deleteOne(req.params.id);
+  const result = await AmenityService.deleteOne(req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `country deleted`,
+    message: `Amenity deleted`,
     data: result,
   });
 });
 
-export const countryController = {
+export const AmenityController = {
   createOne,
   getAll,
   getOne,

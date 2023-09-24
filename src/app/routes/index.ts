@@ -16,6 +16,7 @@ import { StructureRouter } from '../modules/structure/structure.router';
 import { PropertyFeatureRouter } from '../modules/propertyFeature/propertyFeature.router';
 import { UnitRouter } from '../modules/unit/unit.router';
 import { FloorPlanImageRouter } from '../modules/floorPlanImage/floorPlanImage.router';
+import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -82,10 +83,14 @@ const moduleRoutes = [
   {
     path: '/units',
     route: UnitRouter,
-  },l
+  },
   {
     path: '/floor-plan-images',
     route: FloorPlanImageRouter,
+  },
+  {
+    path: '/management-departments',
+    route: ManagementDepartmentRouter,
   },
 ];
 

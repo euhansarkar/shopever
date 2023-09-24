@@ -1,19 +1,21 @@
-import { Country, Prisma } from '@prisma/client';
+import { ManagementDepartment, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { CountrySearchableFields } from './country.constant';
-import { ICountryFilterRequest } from './country.interface';
+import { IManagementDepartmentFilterRequest } from './managementDepartment.interface';
+import { ManagementDepartmentSearchableFields } from './managementDepartment.constant';
 
-const createOne = async (data: Country): Promise<Country | null> => {
-  const result = await prisma.country.create({
+const createOne = async (
+  data: ManagementDepartment
+): Promise<ManagementDepartment | null> => {
+  const result = await prisma.managementDepartment.create({
     data,
   });
   return result;
 };
 
 const getAll = async (
-  filters: ICountryFilterRequest,
+  filters: IManagementDepartmentFilterRequest,
   options: IPaginationOptions
 ) => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
@@ -23,7 +25,7 @@ const getAll = async (
 
   if (searchTerm) {
     andConditions.push({
-      OR: CountrySearchableFields.map(field => ({
+      OR: ManagementDepartmentSearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
@@ -42,21 +44,21 @@ const getAll = async (
     });
   }
 
-  const whereConditions: Prisma.CountryWhereInput =
+  const whereConditions: Prisma.ManagementDepartmentWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  const result = await prisma.country.findMany({
+  const result = await prisma.managementDepartment.findMany({
     where: whereConditions,
     skip,
     take: limit,
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? { [options.sortBy]: options.sortOrder }
-        : {
-            createdAt: 'desc',
-          },
+    // orderBy:
+    //   options.sortBy && options.sortOrder
+    //     ? { [options.sortBy]: options.sortOrder }
+    //     : {
+    //         createdAt: 'desc',
+    //       },
   });
-  const total = await prisma.country.count({
+  const total = await prisma.managementDepartment.count({
     where: whereConditions,
   });
 
@@ -70,8 +72,8 @@ const getAll = async (
   };
 };
 
-const getOne = async (id: string): Promise<Country | null> => {
-  const result = await prisma.country.findUnique({
+const getOne = async (id: string): Promise<ManagementDepartment | null> => {
+  const result = await prisma.managementDepartment.findUnique({
     where: {
       id,
     },
@@ -81,9 +83,9 @@ const getOne = async (id: string): Promise<Country | null> => {
 
 const updateOne = async (
   id: string,
-  payload: Partial<Country>
-): Promise<Country | null> => {
-  const result = await prisma.country.update({
+  payload: Partial<ManagementDepartment>
+): Promise<ManagementDepartment | null> => {
+  const result = await prisma.managementDepartment.update({
     where: {
       id,
     },
@@ -92,8 +94,8 @@ const updateOne = async (
   return result;
 };
 
-const deleteOne = async (id: string): Promise<Country | null> => {
-  const result = await prisma.country.delete({
+const deleteOne = async (id: string): Promise<ManagementDepartment | null> => {
+  const result = await prisma.managementDepartment.delete({
     where: {
       id,
     },
@@ -101,7 +103,7 @@ const deleteOne = async (id: string): Promise<Country | null> => {
   return result;
 };
 
-export const CountryService = {
+export const ManagementDepartmentService = {
   createOne,
   getAll,
   getOne,

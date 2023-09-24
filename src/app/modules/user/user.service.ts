@@ -1,4 +1,5 @@
 import {
+  Admin,
   Faculty,
   Guardian,
   LocalGuardian,
@@ -10,7 +11,7 @@ import {
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
-import { generateFacultyId, generateStudentId } from './user.utils';
+import { generateAdminId, generateFacultyId, generateStudentId } from './user.utils';
 import config from '../../../config';
 
 const createStudent = async (
@@ -103,6 +104,10 @@ const createFaculty = async (
   facultyData: Faculty,
   userData: User
 ): Promise<{ message: string }> => {
+  console.log(`name data`, nameData);
+  console.log(`faculty data`, facultyData);
+  console.log(`user data`, userData);
+
   await prisma.$transaction(async transectionClient => {
     // set role
     userData.role = `faculty`;
@@ -133,9 +138,12 @@ const createFaculty = async (
       throw new ApiError(httpStatus.OK, `failed to create new faculty`);
     }
 
+    console.log(facultyCreation);
     // student id passs to the user table
     userData.facultyId = facultyCreation.uid;
     userData.id = facultyCreation.id;
+
+    console.log(userData);
 
     const userCreation = await transectionClient.user.create({
       data: userData,
@@ -158,4 +166,74 @@ const createFaculty = async (
   return { message: `user created successfully` };
 };
 
-export const UserService = { createStudent, createFaculty };
+
+
+const createAdmin = async (
+  nameData: Name,
+  adminData: Admin,
+  userData: User
+): Promise<{ message: string }> => {
+  console.log(`name data`, nameData);
+  console.log(`admin data`, adminData);
+  console.log(`user data`, userData);
+
+  await prisma.$transaction(async transectionClient => {
+    // set role
+    userData.role = `admin`;
+
+    // default password
+    if (!userData.password) {
+      userData.password = config.default_student_pass as string;
+    }
+
+    // generate user id
+    const id = await generateAdminId();
+    adminData.id = id;
+
+    // name creation
+    const name = await transectionClient.name.create({
+      data: nameData,
+    });
+
+    // push name, guardian, local guardian id to student table
+    adminData.nameId = name.id;
+
+    const adminCreation = await transectionClient.admin.create({
+      data: adminData,
+    });
+
+    // if failed to create user
+    if (!adminCreation) {
+      throw new ApiError(httpStatus.OK, `failed to create new admin`);
+    }
+
+    console.log(adminCreation);
+    // admin id passs to the user table
+    userData.adminId = adminCreation.uid;
+    userData.id = adminCreation.id;
+
+    console.log(userData);
+
+    const userCreation = await transectionClient.user.create({
+      data: userData,
+      include: {
+        student: {
+          include: {
+            name: true,
+            academicDepartment: true,
+            academicFaculty: true,
+          },
+        },
+      },
+    });
+
+    if (!userCreation) {
+      throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
+    }
+  });
+
+  return { message: `user created successfully` };
+};
+
+
+export const UserService = { createStudent, createFaculty, createAdmin };

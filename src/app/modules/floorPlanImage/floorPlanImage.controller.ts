@@ -3,7 +3,11 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-k  const result = await FloorPlanImageService.createOne(req.body);
+import { FloorPlanImageService } from './floorPlanImage.service';
+import { FloorPlanImageFilterableFields } from './floorPlanImage.constant';
+
+const createOne = catchAsync(async (req, res) => {
+  const result = await FloorPlanImageService.createOne(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

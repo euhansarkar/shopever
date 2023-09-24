@@ -17,11 +17,11 @@ model User {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
   facultyId           String?
-  faculty             Faculty?  @relation(fields: [facultyId], references: [id])
+  faculty             Faculty?  @relation(fields: [facultyId], references: [uid])
   studentId           String?
   student             Student?  @relation(fields: [studentId], references: [uid])
   adminId             String?
-  admin               Admin?    @relation(fields: [adminId], references: [id])
+  admin               Admin?    @relation(fields: [adminId], references: [uid])
 
   @@map("users")
 }
@@ -120,6 +120,40 @@ model Faculty {
   @@map("faculties")
 }
 
+model ManagementDepartment {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admins    Admin[]
+
+  @@map("management_departments")
+}
+
+model Admin {
+  uid                    String               @id @default(uuid())
+  id                     String               @unique
+  nameId                 String
+  name                   Name                 @relation(fields: [nameId], references: [id])
+  dateOfBirth            String?
+  gender                 String?
+  bloodGroup             String?
+  email                  String               @unique
+  contactNo              String               @unique
+  emergencyContactNo     String
+  presentAddress         String
+  permanentAddress       String
+  designation            String
+  managementDepartmentId String
+  managementDepartment   ManagementDepartment @relation(fields: [managementDepartmentId], references: [id])
+  profileImage           String?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  User                   User[]
+
+  @@map("admins")
+}
+
 model Name {
   id         String    @id @default(uuid())
   firstName  String
@@ -127,6 +161,7 @@ model Name {
   middleName String?
   students   Student[]
   faculties  Faculty[]
+  Admin      Admin[]
 
   @@map("names")
 }
@@ -154,13 +189,6 @@ model LocalGuardian {
   students   Student[]
 
   @@map("local_guardians")
-}
-
-model Admin {
-  id    String @id @default(uuid())
-  users User[]
-
-  @@map("admins")
 }
 
 model ListingStatus {

@@ -11,8 +11,18 @@ router
     UserController.createStudent
   );
 
+router
+  .route(`/create-faculty`)
+  .post(
+    validateRequest(UserValidation.createFacultyZodSchema),
+    UserController.createFaculty
+  );
 
-  router.route(`/create-faculty`).post(
-    validateRequest()
-  )
+router
+  .route(`/create-admin`)
+  .post(
+    validateRequest(UserValidation.createAdminZodSchema),
+    UserController.createAdmin
+  );
+
 export const UserRouter = router;
