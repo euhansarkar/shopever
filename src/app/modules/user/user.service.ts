@@ -4,7 +4,6 @@ import {
   Guardian,
   LocalGuardian,
   Name,
-  Prisma,
   Student,
   User,
 } from '@prisma/client';

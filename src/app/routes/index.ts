@@ -4,7 +4,7 @@ import { AcademicSemesterRouter } from '../modules/academicSemester/academicSeme
 import { AcademicFacultyRouter } from '../modules/academicFaculty/academicFaculty.router';
 import { AcademicDepartmentRouter } from '../modules/academicDepartment/academicDepartment.router';
 import { ListingStatusRouter } from '../modules/listingStatus/listingStatus.router';
-import { StudentRouter } from '../modules/student/student.router';
+import { FacultyRouter } from '../modules/faculty/faculty.router';
 import { PropertyTypeRouter } from '../modules/propertyType/propertyType.router';
 import { countryRouter } from '../modules/country/country.router';
 import { CityRouter } from '../modules/city/city.router';
@@ -17,6 +17,9 @@ import { PropertyFeatureRouter } from '../modules/propertyFeature/propertyFeatur
 import { UnitRouter } from '../modules/unit/unit.router';
 import { FloorPlanImageRouter } from '../modules/floorPlanImage/floorPlanImage.router';
 import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
+import { AuthRouter } from '../modules/auth/auth.router';
+import { StudentRouter } from '../modules/student copy/student.router';
+import { AdminRouter } from '../modules/admin/admin.router';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -91,6 +94,18 @@ const moduleRoutes = [
   {
     path: '/management-departments',
     route: ManagementDepartmentRouter,
+  },
+  {
+    path: '/auth',
+    route: AuthRouter,
+  },
+  {
+    path: '/faculties',
+    route: FacultyRouter,
+  },
+  {
+    path: '/admins',
+    route: AdminRouter,
   },
 ];
 

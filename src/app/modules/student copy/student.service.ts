@@ -15,6 +15,8 @@ const getAll = async (
   filters: IStudentFilterRequest,
   options: IPaginationOptions
 ) => {
+
+
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 

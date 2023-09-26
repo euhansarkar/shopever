@@ -5,7 +5,6 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 
 import cookieParser from 'cookie-parser';
-import { generateStudentId } from './app/modules/user/user.utils';
 
 const app: Application = express();
 
@@ -17,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1', routes);
-
 
 //global error handler
 app.use(globalErrorHandler);
@@ -36,6 +34,5 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   });
   next();
 });
-
 
 export default app;
