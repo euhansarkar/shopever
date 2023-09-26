@@ -18,7 +18,7 @@ import { UnitRouter } from '../modules/unit/unit.router';
 import { FloorPlanImageRouter } from '../modules/floorPlanImage/floorPlanImage.router';
 import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
 import { AuthRouter } from '../modules/auth/auth.router';
-import { StudentRouter } from '../modules/student copy/student.router';
+import { StudentRouter } from '../modules/student/student.router';
 import { AdminRouter } from '../modules/admin/admin.router';
 const router = express.Router();
 
