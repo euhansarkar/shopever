@@ -7,6 +7,7 @@ import { studentFilterableFields } from './student.constant';
 import { paginationFields } from '../../../constants/pagination';
 
 const getAll = catchAsync(async (req, res) => {
+  
   console.log(`get token from headers`, req.user);
   const filters = pick(req.query, studentFilterableFields);
   const options = pick(req.query, paginationFields);

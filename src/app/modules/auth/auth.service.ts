@@ -1,4 +1,5 @@
 import {
+  IChangePassword,
   ILogin,
   ILoginResponse,
   IRefreshTokenResponse,
@@ -6,9 +7,11 @@ import {
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
 import prismaWithExtensions from '../../prismaMiddlwares/prismaWithExtensions';
-import { Secret } from 'jsonwebtoken';
+import { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
+import bcrypt from 'bcrypt';
+import prisma from '../../../shared/prisma';
 
 const login = async (data: ILogin): Promise<ILoginResponse> => {
   const { id, password } = data;
@@ -84,4 +87,50 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   return { accessToken: newAccessToken };
 };
 
-export const AuthService = { login, refreshToken };
+const changePassword = async (
+  userData: JwtPayload | null,
+  passwordData: IChangePassword
+): Promise<{ message: string }> => {
+  console.log(userData);
+  const { id } = userData!;
+  const { oldPassword, newPassword } = passwordData!;
+
+  // checking is user exists
+  const isUserExist = await prismaWithExtensions.user.isUserExists(id);
+
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `user not found`);
+  }
+
+  if (
+    isUserExist.password &&
+    !(await prismaWithExtensions.user.isPasswordMatched(
+      oldPassword,
+      isUserExist.password
+    ))
+  ) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, `old password is incorrect`);
+  }
+
+  const newHashPassword = await bcrypt.hash(
+    newPassword,
+    Number(config.bycrypt_salt_rounds)
+  );
+
+  const updatedData = {
+    password: newHashPassword,
+    needsPasswordChange: false,
+    passwordChangeAt: new Date(),
+  };
+
+  await prisma.user.update({
+    where: {
+      id: isUserExist.id,
+    },
+    data: updatedData,
+  });
+
+  return { message: `password changed successfully` };
+};
+
+export const AuthService = { login, refreshToken, changePassword };

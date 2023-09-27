@@ -16,7 +16,6 @@ const login = catchAsync(async (req, res) => {
 
   res.cookie(`refreshToken`, result.refreshToken, cookieOptions);
   const { refreshToken, ...others } = result;
-  
 
   sendResponse<ILoginResponse>(res, {
     statusCode: httpStatus.OK,
@@ -46,4 +45,18 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
-export const AuthController = { login, refreshToken };
+const changePassword = catchAsync(async (req, res) => {
+  console.log(req.user);
+  const user = req.user;
+  const { ...passwordData } = req.body;
+  const result = await AuthService.changePassword(user, passwordData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `password changed`,
+    data: result,
+  });
+});
+
+export const AuthController = { login, refreshToken, changePassword };

@@ -19,4 +19,15 @@ const refreshToken = z.object({
   }),
 });
 
-export const AuthValidator = { login, refreshToken };
+const changePassword = z.object({
+  body: z.object({
+    oldPassword: z.string({
+      required_error: `old password is required`,
+    }),
+    newPassword: z.string({
+      required_error: `new password is required`,
+    }),
+  }),
+});
+
+export const AuthValidator = { login, refreshToken, changePassword };
