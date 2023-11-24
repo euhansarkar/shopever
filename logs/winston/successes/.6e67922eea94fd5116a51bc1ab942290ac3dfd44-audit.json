@@ -1,0 +1,40 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\.6e67922eea94fd5116a51bc1ab942290ac3dfd44-audit.json",
+    "files": [
+        {
+            "date": 1700139925480,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-16-11-19-success.log",
+            "hash": "e22eddfe2633406b793548052a7393ee1c5c29df2d32dd9f32c3c935eb3028a8"
+        },
+        {
+            "date": 1700143213958,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-16-11-20-success.log",
+            "hash": "134510b150c28107286a1ef9169341e1ba3e4c1bea45ab29d8c44e8431f8a20c"
+        },
+        {
+            "date": 1700147312889,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-16-11-21-success.log",
+            "hash": "2e5336a22b75b227847e9d1c0f062adc07211142c3fbe7b03c09edc8bd513c99"
+        },
+        {
+            "date": 1700151997830,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-16-11-22-success.log",
+            "hash": "9b2ef94b277617919639535b32c10a85565344ea79fe2a26e7c3505ff1740f6f"
+        },
+        {
+            "date": 1700154198817,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-16-11-23-success.log",
+            "hash": "ec83bc6f048e6bda30cfc5160ff78d40867ed0a9ce065fa57d827e2fcfb5ee28"
+        },
+        {
+            "date": 1700157601565,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\successes\\phu-2023-17-11-00-success.log",
+            "hash": "fabb28c0d59dd61b34f35170ff243efc32658134119f7d243807eff5c4f22a07"
+        }
+    ],
+    "hashType": "sha256"
+}

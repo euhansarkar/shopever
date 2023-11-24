@@ -56,7 +56,7 @@ const getAll = async (
 
   const result = await prisma.admin.findMany({
     include: {
-      managementDepartment: true,
+      management_department: true,
     },
     where: whereConditions,
     skip,
@@ -65,7 +65,7 @@ const getAll = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            createdAt: 'desc',
+            created_at: 'desc',
           },
   });
   const total = await prisma.admin.count({
@@ -89,7 +89,7 @@ const getOne = async (id: string): Promise<Admin | null> => {
     },
     include: {
       name: true,
-      managementDepartment: true,
+      management_department: true,
     },
   });
 
@@ -110,7 +110,7 @@ const updateOne = async (
   await prisma.$transaction(async transectionClient => {
     await transectionClient.name.update({
       where: {
-        id: isExist.nameId,
+        id: isExist.name_id,
       },
       data: { ...nameData },
     });
@@ -145,7 +145,7 @@ const deleteOne = async (id: string): Promise<Admin | null> => {
   const result = await prisma.$transaction(async transactionClient => {
     await transactionClient.name.delete({
       where: {
-        id: isExist.nameId,
+        id: isExist.name_id,
       },
     });
 

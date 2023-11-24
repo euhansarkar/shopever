@@ -1,0 +1,170 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\.1be909a3896bc0819b0f419eefdac7b908fab578-audit.json",
+    "files": [
+        {
+            "date": 1700213592826,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-15-error.log",
+            "hash": "adf8e5bc51f56d591d8b17d3ca5222bd3391bc6e707f08f96abbf635973e5449"
+        },
+        {
+            "date": 1700217885612,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-16-error.log",
+            "hash": "9933fd624cd9e242cf14ce59127145c6f1dcbf64f401df4d1434d1f66bab086d"
+        },
+        {
+            "date": 1700218801676,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-17-error.log",
+            "hash": "90a3bba0c12f988496efb9db804d475de79ca9280b2f28119cee6abbffb6eff9"
+        },
+        {
+            "date": 1700224811898,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-18-error.log",
+            "hash": "10de288b1dc336720b7fa75bcd27251f3cabce5373c730949a1d9d763e142c49"
+        },
+        {
+            "date": 1700235622779,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-21-error.log",
+            "hash": "0a7d26afdc06fb5615058b39feb4531c117358a2383a69e98ca7253734b0f1a3"
+        },
+        {
+            "date": 1700237123703,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-22-error.log",
+            "hash": "1021cfa6a0ab489cc8029ad706262f0648ce94f5366ee6fd1b14f7054a6f41b1"
+        },
+        {
+            "date": 1700240475588,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-17-11-23-error.log",
+            "hash": "e39202156d2d5a9142938ecfa7adba4cb1691521f23ad00527d6efc4d8e2ffb0"
+        },
+        {
+            "date": 1700244267575,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-18-11-00-error.log",
+            "hash": "6f8a3135cbb3d9e4fb0aa4faee7f682507f897f1f294707f37b7ede2ebf315f0"
+        },
+        {
+            "date": 1700505751274,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-21-11-00-error.log",
+            "hash": "2091ca870d72d4b3def0f8f496f6249f62e46cea3461332757fe15f161daf5a6"
+        },
+        {
+            "date": 1700506800868,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-21-11-01-error.log",
+            "hash": "dfca1b6ce807f1a13e0ed84a8ecea54cf79d912bbc212b8d897f1086f730a135"
+        },
+        {
+            "date": 1700510401813,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-21-11-02-error.log",
+            "hash": "6574321a4462ae44df9075dbc69f29a4b6ad79145369db293c6dfd2c095408a3"
+        },
+        {
+            "date": 1700576951689,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-21-11-20-error.log",
+            "hash": "c8d1b8c759c3ddaaad980dd58f794fa882f23796e76be106cbb76f02c752a4b6"
+        },
+        {
+            "date": 1700588871130,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-21-11-23-error.log",
+            "hash": "5fc4f15ccb959cf8d1ee753cdf6ea51a87145b60d6b0436a80a19e7f756da20b"
+        },
+        {
+            "date": 1700592150661,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-22-11-00-error.log",
+            "hash": "f905f7b9a4421773979b92eb2e3f00828494634d1f7c980c317991b32ee25dc5"
+        },
+        {
+            "date": 1700593202235,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-22-11-01-error.log",
+            "hash": "c3ee7a543d0adad7385e11d9f1b59562b1ecd732e4d15b1441d9220e77be9da9"
+        },
+        {
+            "date": 1700596820494,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-22-11-02-error.log",
+            "hash": "3a9fb083ad0c89fd8ca29e9225b3771e4a9c365e5ed27d75f39fab69a4876a5c"
+        },
+        {
+            "date": 1700600402582,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-22-11-03-error.log",
+            "hash": "a547bda2e7240c0782ed6a74d8740fb84d241b95d093c73ccc2ff1e516cedbc1"
+        },
+        {
+            "date": 1700674302270,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-22-11-23-error.log",
+            "hash": "8a261fc92dff041a5cfee9ca408b824ef64282fe0b9a6de89e5dd8a7c580bb0a"
+        },
+        {
+            "date": 1700676040635,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-23-11-00-error.log",
+            "hash": "a3a85ba532b0f0f3a97861a286d7ff15cce9439a742ea329f8931f06aa70ce44"
+        },
+        {
+            "date": 1700679819601,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-23-11-01-error.log",
+            "hash": "3d10d08b316be55420c7494c0a80bc3dcfdddba3ec064a3f0e723e31a4585fd0"
+        },
+        {
+            "date": 1700683200703,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-23-11-02-error.log",
+            "hash": "3b910a5443c415fc83c9054b6252dd65a7f5b70a88856e36e14e99667b18fc90"
+        },
+        {
+            "date": 1700757092598,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-23-11-22-error.log",
+            "hash": "c83dcb94be38ba05325895850aa49258014dd64348cd9d07ab48fcedba70ef41"
+        },
+        {
+            "date": 1700758801851,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-23-11-23-error.log",
+            "hash": "a55e902d5c95f203661e0874b619b781c1fd3d99eecf06e2f7e7d35a084e037c"
+        },
+        {
+            "date": 1700765971057,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-00-error.log",
+            "hash": "ad67e20bbf6832e7a882f8f84bbd0fb9b0d64547d13f9c9073426d41884c5cb1"
+        },
+        {
+            "date": 1700766068479,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-01-error.log",
+            "hash": "e9f1622a3f551401143e41a9c0f9a90f97f601f7200e79b19a468cc766c2d824"
+        },
+        {
+            "date": 1700806555248,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-12-error.log",
+            "hash": "fa33a02d72ddc042591867c79ce13c623f439ba13b0312e5592be71a36e1208f"
+        },
+        {
+            "date": 1700819725957,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-15-error.log",
+            "hash": "f072e4773e6cb1071a47e1eb9b07f1e0b2e3b75e6785729c8941f2123f813501"
+        },
+        {
+            "date": 1700820237255,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-16-error.log",
+            "hash": "1b736fcb6d58fabb77889407227e12b78763c1ae1e0d02ac23ec0399e7372a77"
+        },
+        {
+            "date": 1700826086478,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-17-error.log",
+            "hash": "0b8f82e693152ffb2c61ad1d71b006439d4f3675ef1bd4995d88eebaf127c201"
+        },
+        {
+            "date": 1700827214513,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-18-error.log",
+            "hash": "529778a683eac86735f1abebea0781e647ee3237ba853e1b86f3ec8a2e19aa27"
+        },
+        {
+            "date": 1700830806043,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-19-error.log",
+            "hash": "2ce0605a35fb472411006deb0266e98f64e59ccaf1fe18db4844e4dc8ec16c72"
+        },
+        {
+            "date": 1700834703740,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\errors\\phu-2023-24-11-20-error.log",
+            "hash": "f228539b8731eaf972efb83e26099440e5dff68ea2d67d0586777a537222a087"
+        }
+    ],
+    "hashType": "sha256"
+}

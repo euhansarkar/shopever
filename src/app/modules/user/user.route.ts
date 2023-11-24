@@ -4,19 +4,11 @@ import validateRequest from '../../middlewares/validateRequest';
 import { UserValidation } from './user.validation';
 const router = express.Router();
 
-router
-  .route(`/create-student`)
-  .post(
-    validateRequest(UserValidation.createStudentZodSchema),
-    UserController.createStudent
-  );
 
 router
-  .route(`/create-faculty`)
-  .post(
-    validateRequest(UserValidation.createFacultyZodSchema),
-    UserController.createFaculty
-  );
+  .route(`/create-customer`)
+  .post(validateRequest(UserValidation.createCustomerZodSchema),
+    UserController.createCustomer);
 
 router
   .route(`/create-admin`)

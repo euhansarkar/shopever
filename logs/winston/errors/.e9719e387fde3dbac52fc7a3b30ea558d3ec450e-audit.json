@@ -1,0 +1,40 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\.e9719e387fde3dbac52fc7a3b30ea558d3ec450e-audit.json",
+    "files": [
+        {
+            "date": 1700139925493,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-16-11-19-error.log",
+            "hash": "3a4ebb07ebd165374cbefe4a9cab209662774da6849d24fbf2111d03fc7f4de8"
+        },
+        {
+            "date": 1700143213978,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-16-11-20-error.log",
+            "hash": "a2d2dbef6008c2431a47e4c336a618a7cb6ebd3a7dee9c465659e26ae732a2e0"
+        },
+        {
+            "date": 1700147312900,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-16-11-21-error.log",
+            "hash": "dbcce06d8e2af0b89c64a68d46a69553c4d7321955e38c3841a656d9e1beb4ec"
+        },
+        {
+            "date": 1700151997846,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-16-11-22-error.log",
+            "hash": "405ea3db61cbc1deea781877c87061d287429b78a70e23c5bcba1cab10c43ce8"
+        },
+        {
+            "date": 1700154198830,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-16-11-23-error.log",
+            "hash": "ee7f288672286c3a749fd3a184b633babd0cb8680cb581c7f1d33fa3c1601e81"
+        },
+        {
+            "date": 1700157601581,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\express-prisma-project-starter\\logs\\winston\\errors\\phu-2023-17-11-00-error.log",
+            "hash": "b91007a7aaf9c877263110f3a04239ebe60bc01bf5f549031d7c0e3c8d5c3971"
+        }
+    ],
+    "hashType": "sha256"
+}

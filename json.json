@@ -1,0 +1,58 @@
+{
+  "name": "Product Name",
+  "description": "Product Description",
+  "short_description": "Short Description",
+  "url_key": "product-url-key",
+  "meta_title": "Meta Title",
+  "meta_description": "Meta Description",
+  "meta_keywords": "keyword1, keyword2, keyword3",
+  "status": 1,
+  "sku": "ABC123",
+  "price": 29.99,
+  "weight": 1.5,
+  "qty": 100,
+  "manage_stock": 1,
+  "stock_availability": 1,
+  "group_id": "group123",
+  "visibility": 1,
+  "images": ["image1.jpg", "image2.jpg"],
+  "attributes": [
+    {
+      "attribute_code": "attribute123",
+      "value": "Attribute Value",
+      "category_id": "category123",
+      "options": [
+        {
+          "option_name": "Option1",
+          "option_type": "select",
+          "is_required": 0,
+          "values": [
+            {
+              "value": "Value1",
+              "extra_price": 5.99
+            },
+            {
+              "value": "Value2",
+              "extra_price": 8.99
+            }
+          ]
+        },
+        {
+          "option_name": "Option2",
+          "option_type": "multiselect",
+          "is_required": 1,
+          "values": [
+            {
+              "value": "Value3",
+              "extra_price": 3.99
+            },
+            {
+              "value": "Value4",
+              "extra_price": 6.99
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

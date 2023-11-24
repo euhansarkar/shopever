@@ -1,95 +1,19 @@
 import express from 'express';
 import { UserRouter } from '../modules/user/user.route';
-import { AcademicSemesterRouter } from '../modules/academicSemester/academicSemester.router';
-import { AcademicFacultyRouter } from '../modules/academicFaculty/academicFaculty.router';
-import { AcademicDepartmentRouter } from '../modules/academicDepartment/academicDepartment.router';
-import { ListingStatusRouter } from '../modules/listingStatus/listingStatus.router';
-import { FacultyRouter } from '../modules/faculty/faculty.router';
-import { PropertyTypeRouter } from '../modules/propertyType/propertyType.router';
-import { countryRouter } from '../modules/country/country.router';
-import { CityRouter } from '../modules/city/city.router';
-import { CoordinateRouter } from '../modules/coordinate/coordinate.router';
-import { RentPropertyRouter } from '../modules/rentProperty/rentProperty.router';
-import { propertyAddressRouter } from '../modules/propertyAddress/propertyAddress.router';
-import { ApartmentRouter } from '../modules/apartment/apartment.router';
-import { StructureRouter } from '../modules/structure/structure.router';
-import { PropertyFeatureRouter } from '../modules/propertyFeature/propertyFeature.router';
-import { UnitRouter } from '../modules/unit/unit.router';
-import { FloorPlanImageRouter } from '../modules/floorPlanImage/floorPlanImage.router';
-import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
-import { AuthRouter } from '../modules/auth/auth.router';
-import { StudentRouter } from '../modules/student/student.router';
 import { AdminRouter } from '../modules/admin/admin.router';
+import { AuthRouter } from '../modules/auth/auth.router';
+import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
+import { CustomerRouter } from '../modules/customer/customer.router';
+import { AttributeGroupRouter } from '../modules/attributeGroup/attributeGroup.router';
+import { AttributeRouter } from '../modules/attribute/attribute.router';
+import { CategoryRouter } from '../modules/category/category.router';
+import { ProductRouter } from '../modules/product/product.router';
 const router = express.Router();
 
 const moduleRoutes = [
   {
     path: '/users',
     route: UserRouter,
-  },
-  {
-    path: '/academic-semesters',
-    route: AcademicSemesterRouter,
-  },
-  {
-    path: '/academic-faculties',
-    route: AcademicFacultyRouter,
-  },
-  {
-    path: '/academic-departments',
-    route: AcademicDepartmentRouter,
-  },
-  {
-    path: '/listing-statuses',
-    route: ListingStatusRouter,
-  },
-  {
-    path: '/students',
-    route: StudentRouter,
-  },
-  {
-    path: '/property-types',
-    route: PropertyTypeRouter,
-  },
-  {
-    path: '/countries',
-    route: countryRouter,
-  },
-  {
-    path: '/cities',
-    route: CityRouter,
-  },
-  {
-    path: '/coordinates',
-    route: CoordinateRouter,
-  },
-  {
-    path: '/rent-properties',
-    route: RentPropertyRouter,
-  },
-  {
-    path: '/property-addresses',
-    route: propertyAddressRouter,
-  },
-  {
-    path: '/apartments',
-    route: ApartmentRouter,
-  },
-  {
-    path: '/structures',
-    route: StructureRouter,
-  },
-  {
-    path: '/property-features',
-    route: PropertyFeatureRouter,
-  },
-  {
-    path: '/units',
-    route: UnitRouter,
-  },
-  {
-    path: '/floor-plan-images',
-    route: FloorPlanImageRouter,
   },
   {
     path: '/management-departments',
@@ -100,13 +24,29 @@ const moduleRoutes = [
     route: AuthRouter,
   },
   {
-    path: '/faculties',
-    route: FacultyRouter,
-  },
-  {
     path: '/admins',
     route: AdminRouter,
   },
+  {
+    path: '/customers',
+    route: CustomerRouter,
+  },
+  {
+    path: '/attribute-groups',
+    route: AttributeGroupRouter,
+  },
+  {
+    path: '/attributes',
+    route: AttributeRouter,
+  },
+  {
+    path: '/categories',
+    route: CategoryRouter,
+  },
+  {
+    path: '/products',
+    route: ProductRouter,
+  }
 ];
 
 moduleRoutes.forEach(route => router.use(route.path, route.route));

@@ -1,94 +1,72 @@
 import {
   Admin,
-  Faculty,
-  Guardian,
-  LocalGuardian,
+  Customer,
   Name,
-  Student,
   User,
 } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
-import { generateAdminId, generateFacultyId, generateStudentId } from './user.utils';
+import { generateAdminId, generateCustomerId } from './user.utils';
 import config from '../../../config';
 
-const createStudent = async (
+
+
+
+const createCustomer = async (
   nameData: Name,
-  studentData: Student,
-  guardianData: Guardian,
-  localGuardianData: LocalGuardian,
+  customerData: Customer,
   userData: User
 ): Promise<{ message: string }> => {
+
   await prisma.$transaction(async transectionClient => {
     // set role
-    userData.role = `student`;
+    userData.role = `customer`;
 
     // default password
     if (!userData.password) {
-      userData.password = config.default_student_pass as string;
+      userData.password = config.default_admin_pass as string;
     }
 
-    //academic semester find
-    const academicSemester =
-      await transectionClient.academicSemester.findUnique({
-        where: {
-          id: studentData.academicSemesterId,
-        },
-      });
 
     // generate user id
-    const id = await generateStudentId(academicSemester);
-    studentData.id = id;
+    const id = await generateCustomerId();
+    customerData.id = id;
 
     // name creation
     const name = await transectionClient.name.create({
       data: nameData,
     });
 
-    // guardian creation
-    const guardian = await transectionClient.guardian.create({
-      data: guardianData,
-    });
+    // push name id to admin table
+    customerData.name_id = name.id;
 
-    // local guardian creation
-    const localGuardian = await transectionClient.localGuardian.create({
-      data: localGuardianData,
-    });
-
-    // push name, guardian, local guardian id to student table
-    studentData.nameId = name.id;
-    studentData.guardianId = guardian.id;
-    studentData.localGuardianId = localGuardian.id;
-
-    const studentCreation = await transectionClient.student.create({
-      data: studentData,
+    const customerCreation = await transectionClient.customer.create({
+      data: customerData
     });
 
     // if failed to create user
-    if (!studentCreation) {
-      throw new ApiError(httpStatus.OK, `failed to create new student`);
+    if (!customerCreation) {
+      throw new ApiError(httpStatus.OK, `failed to create new admin`);
     }
 
-    // student id passs to the user table
-    userData.studentId = studentCreation.uid;
-    userData.id = studentCreation.id;
+    console.log(customerCreation);
+    // admin id passs to the user table
+    userData.customer_id = customerCreation.uid;
+    userData.id = customerCreation.id;
+
 
     const userCreation = await transectionClient.user.create({
       data: userData,
       include: {
-        student: {
+        admin: {
           include: {
             name: true,
-            guardian: true,
-            localGuardian: true,
-            academicDepartment: true,
-            academicSemester: true,
-            academicFaculty: true,
           },
         },
       },
     });
+    console.log(`user created`, userCreation);
 
     if (!userCreation) {
       throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
@@ -97,84 +75,12 @@ const createStudent = async (
 
   return { message: `user created successfully` };
 };
-
-const createFaculty = async (
-  nameData: Name,
-  facultyData: Faculty,
-  userData: User
-): Promise<{ message: string }> => {
-  console.log(`name data`, nameData);
-  console.log(`faculty data`, facultyData);
-  console.log(`user data`, userData);
-
-  await prisma.$transaction(async transectionClient => {
-    // set role
-    userData.role = `faculty`;
-
-    // default password
-    if (!userData.password) {
-      userData.password = config.default_student_pass as string;
-    }
-
-    // generate user id
-    const id = await generateFacultyId();
-    facultyData.id = id;
-
-    // name creation
-    const name = await transectionClient.name.create({
-      data: nameData,
-    });
-
-    // push name, guardian, local guardian id to student table
-    facultyData.nameId = name.id;
-
-    const facultyCreation = await transectionClient.faculty.create({
-      data: facultyData,
-    });
-
-    // if failed to create user
-    if (!facultyCreation) {
-      throw new ApiError(httpStatus.OK, `failed to create new faculty`);
-    }
-
-    console.log(facultyCreation);
-    // student id passs to the user table
-    userData.facultyId = facultyCreation.uid;
-    userData.id = facultyCreation.id;
-
-    console.log(userData);
-
-    const userCreation = await transectionClient.user.create({
-      data: userData,
-      include: {
-        student: {
-          include: {
-            name: true,
-            academicDepartment: true,
-            academicFaculty: true,
-          },
-        },
-      },
-    });
-
-    if (!userCreation) {
-      throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
-    }
-  });
-
-  return { message: `user created successfully` };
-};
-
-
 
 const createAdmin = async (
   nameData: Name,
   adminData: Admin,
   userData: User
 ): Promise<{ message: string }> => {
-  console.log(`name data`, nameData);
-  console.log(`admin data`, adminData);
-  console.log(`user data`, userData);
 
   await prisma.$transaction(async transectionClient => {
     // set role
@@ -182,8 +88,10 @@ const createAdmin = async (
 
     // default password
     if (!userData.password) {
-      userData.password = config.default_student_pass as string;
+      userData.password = config.default_admin_pass as string;
     }
+
+    console.log(`from line 32`, userData);
 
     // generate user id
     const id = await generateAdminId();
@@ -194,8 +102,8 @@ const createAdmin = async (
       data: nameData,
     });
 
-    // push name, guardian, local guardian id to student table
-    adminData.nameId = name.id;
+    // push name id to admin table
+    adminData.name_id = name.id;
 
     const adminCreation = await transectionClient.admin.create({
       data: adminData,
@@ -208,7 +116,7 @@ const createAdmin = async (
 
     console.log(adminCreation);
     // admin id passs to the user table
-    userData.adminId = adminCreation.uid;
+    userData.admin_id = adminCreation.uid;
     userData.id = adminCreation.id;
 
     console.log(userData);
@@ -216,11 +124,9 @@ const createAdmin = async (
     const userCreation = await transectionClient.user.create({
       data: userData,
       include: {
-        student: {
+        admin: {
           include: {
             name: true,
-            academicDepartment: true,
-            academicFaculty: true,
           },
         },
       },
@@ -235,4 +141,4 @@ const createAdmin = async (
 };
 
 
-export const UserService = { createStudent, createFaculty, createAdmin };
+export const UserService = { createAdmin, createCustomer };

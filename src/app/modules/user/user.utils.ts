@@ -1,11 +1,11 @@
-import { AcademicSemester } from '@prisma/client';
+
 import prisma from '../../../shared/prisma';
 
 //User ID
 export const findLastUserId = async (): Promise<string | undefined> => {
   const lastUser = await prisma.user.findFirst({
     select: { id: true },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { created_at: "desc" },
   });
   return lastUser?.id.toString();
 };
@@ -16,61 +16,29 @@ export const generateUserId = async () => {
   return incrementedId;
 };
 
-// Student ID
-export const findLastStudentId = async (): Promise<string | undefined> => {
-  const lastStudent = await prisma.user.findFirst({
+
+// Customer ID
+export const findLastCustomerId = async (): Promise<string | undefined> => {
+  const lastCustomer = await prisma.user.findFirst({
     where: {
-      role: 'student',
+      role: 'customer',
     },
     select: {
       id: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      created_at: "desc"
     },
   });
 
-  return lastStudent?.id ? lastStudent.id.substring(4) : undefined;
+  return lastCustomer?.id ? lastCustomer.id.substring(2) : undefined;
 };
 
-export const generateStudentId = async (
-  academicSemester: any
-): Promise<string> => {
-  const currentId = (await findLastStudentId()) || '00000';
+export const generateCustomerId = async (): Promise<string> => {
+  const currentId = (await findLastCustomerId()) || '00000';
 
   let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
-
-  incrementedId = `${academicSemester.year.substring(2)}${
-    academicSemester.code
-  }${incrementedId}`;
-
-  return incrementedId;
-};
-
-// Faculty ID
-export const findLastFacultyId = async (): Promise<string | undefined> => {
-  const lastFaculty = await prisma.user.findFirst({
-    where: {
-      role: 'faculty',
-    },
-    select: {
-      id: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-
-  return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
-};
-
-export const generateFacultyId = async (): Promise<string> => {
-  const currentId = (await findLastFacultyId()) || '00000';
-
-  // increment by 1
-  let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
-
-  incrementedId = `F-${incrementedId}`;
+  incrementedId = `C-${incrementedId}`;
 
   return incrementedId;
 };
@@ -86,7 +54,7 @@ export const findLastAdminId = async (): Promise<string | undefined> => {
       id: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      created_at: "desc"
     },
   });
 
