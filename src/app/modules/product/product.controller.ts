@@ -2,12 +2,14 @@ import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { ProductService } from "./product.service";
+import pick from "../../../shared/pick";
+import { ProductSearchableFields } from "./product.constant";
 
 const createProduct = catchAsync(async (req, res) => {
 
     const { images, meta_seo, product_attributes, ...productData } = req.body;
 
-    const result = await ProductService.createProduct(productData, images, meta_seo, product_attributes);
+    const result = await ProductService.createOne(productData, images, meta_seo, product_attributes);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -17,4 +19,48 @@ const createProduct = catchAsync(async (req, res) => {
     })
 })
 
-export const ProductController = { createProduct }
+const getAll = catchAsync(async (req, res) => {
+    const filters = pick(req.params, ProductSearchableFields);
+    const options = pick(req.params, [`page`, `limit`, `sortBy`, `sortOrder`]);
+    const result = await ProductService.getAll(filters, options);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `products found successfully`,
+        meta: result.meta,
+        data: result.data
+    })
+})
+
+const getOne = catchAsync(async (req, res) => {
+    const result = await ProductService.getOne(req.params.id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `product found`,
+        data: result
+    })
+})
+
+const updateOne = catchAsync(async (req, res) => {
+    const { images, meta_seo, product_attributes, ...productData } = req.body;
+    const result = await ProductService.updateOne(req.params.id, productData, images, meta_seo, product_attributes);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `product updated`,
+        data: result
+    })
+})
+
+const deleteOne = catchAsync(async (req, res) => {
+    const result = await ProductService.deleteOne(req.params.id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `product deleted`,
+        data: result
+    })
+})
+
+export const ProductController = { createProduct, getOne, getAll, updateOne, deleteOne }

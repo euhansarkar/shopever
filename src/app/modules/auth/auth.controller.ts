@@ -6,6 +6,7 @@ import { ILoginResponse } from './auth.interface';
 import config from '../../../config';
 
 const login = catchAsync(async (req, res) => {
+
   const result = await AuthService.login(req.body);
 
   //set refresh token into cookie
@@ -27,7 +28,7 @@ const login = catchAsync(async (req, res) => {
 
 const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
-  const result = AuthService.refreshToken(refreshToken);
+  const result = await AuthService.refreshToken(refreshToken);
 
   //set refresh token into cookie
   const cookieOptions = {
@@ -46,7 +47,6 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 const changePassword = catchAsync(async (req, res) => {
-  console.log(req.user);
   const user = req.user;
   const { ...passwordData } = req.body;
   const result = await AuthService.changePassword(user, passwordData);

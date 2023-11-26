@@ -31,8 +31,8 @@ const getOne = catchAsync(async (req, res) => {
 });
 
 const updateOne = catchAsync(async (req, res) => {
-  const { name, Admin } = req.body;
-  const result = await AdminService.updateOne(req.params.id, name, Admin);
+  const { name, admin } = req.body;
+  const result = await AdminService.updateOne(req.params.id, name, admin);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

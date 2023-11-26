@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken';
 
 export type ILogin = {
-  id: string;
+  email: string;
   password: string;
 };
 

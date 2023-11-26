@@ -12,6 +12,7 @@ model User {
   id                       String               @unique
   role                     String
   password                 String
+  email                    String               @unique
   needs_password_change    Boolean?             @default(true)
   password_change_at       DateTime?            @default(now())
   created_at               DateTime             @default(now())
@@ -21,7 +22,7 @@ model User {
   customer_id              String?
   customer                 Customer?            @relation(fields: [customer_id], references: [uid])
   user_coupon_condition    UserCouponCondition? @relation(fields: [user_coupon_condition_id], references: [id])
-  user_coupon_condition_id String?              @map("userCouponConditionId")
+  user_coupon_condition_id String?              
 
   @@map("users")
 }
@@ -39,10 +40,10 @@ model ManagementDepartment {
 model Customer {
   uid        String   @id @default(uuid())
   id         String   @unique
-  name_id    String   @map("nameId")
+  name_id    String
   name       Name     @relation(fields: [name_id], references: [id])
-  email      String
   created_at DateTime @default(now())
+  country    String?
   updated_at DateTime @updatedAt
   users      User[]
 
@@ -52,13 +53,12 @@ model Customer {
 model Admin {
   uid                      String               @id @default(uuid())
   id                       String               @unique
-  name_id                  String               @map("nameId")
-  name                     Name                 @relation(fields: [name_id], references: [id])
-  date_of_birth            String?              @map("dateOfBirth")
+  name_id                  String
+  name                     Name?                @relation(fields: [name_id], references: [id])
+  date_of_birth            String?
   gender                   String?
-  blood_group              String?              @map("bloodGroup")
-  email                    String               @unique
-  contact_no               String               @unique @map("contactNo")
+  blood_group              String?
+  contact_no               String               @unique
   emergency_contact_no     String
   present_address          String
   permanent_address        String
@@ -109,12 +109,11 @@ model MetaSEO {
   meta_description String
   url_key          String
   categories       Category[]
-  CMS              CMS?       @relation(fields: [cMS_id], references: [id])
-  cMS_id           String?    @map("cMSId")
   keywords         Keyword[]
   created_at       DateTime   @default(now())
   updated_at       DateTime   @updatedAt
-  Product          Product[]
+  products         Product[]
+  CMSs             CMS[]
 }
 
 model Keyword {
@@ -213,6 +212,8 @@ model Product {
   product_attributes ProductAttribute[]
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
+  collections        Collection[]
+  ProductID          ProductID[]
 }
 
 model ProductAttribute {
@@ -221,6 +222,7 @@ model ProductAttribute {
   attribute_id          String
   product               Product?                @relation(fields: [product_id], references: [id])
   product_id            String?
+  is_deleted            Boolean?
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   ProductAttributeValue ProductAttributeValue[]
@@ -233,6 +235,7 @@ model ProductAttributeValue {
   attribute_option     AttributeOption  @relation(fields: [attribute_option_id], references: [id])
   attribute_option_id  String
   extra_price          Float
+  is_deleted           Boolean?
   created_at           DateTime         @default(now())
   updated_at           DateTime         @updatedAt
 }
@@ -260,8 +263,7 @@ model CustomerInfo {
 }
 
 model CustomerAddress {
-  id String @id @default(uuid())
-
+  id               String        @id @default(uuid())
   type             AddressType
   customer_info    CustomerInfo? @relation(fields: [customer_info_id], references: [id])
   customer_info_id String?
@@ -371,15 +373,42 @@ model UserCouponCondition {
   updated_at DateTime @updatedAt
 }
 
+model Order {
+  id           String   @id @default(uuid())
+  order_number Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
 model CMS {
   id         String    @id @default(uuid())
   status     Boolean
   layout     CMSLayout
   name       String
   content    String
-  metaSEOs   MetaSEO[]
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+  MetaSEO    MetaSEO?  @relation(fields: [metaSEOId], references: [id])
+  metaSEOId  String?
+}
+
+model Collection {
+  id              String      @id @default(uuid())
+  collection_name String
+  collection_code String
+  description     String
+  products        Product[]
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  ProductID       ProductID[]
+}
+
+model ProductID {
+  id           String     @id @default(uuid())
+  product      Product    @relation(fields: [productId], references: [id])
+  productId    String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
 }
 
 enum AddressType {

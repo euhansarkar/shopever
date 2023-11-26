@@ -124,16 +124,13 @@ const updateOne = async (id: string, categoryData: Partial<Category>, keywords: 
 
             const newKeywords = keywords.filter(keyword => keyword?.name && !keyword.isDeleted);
 
-            console.log()
 
             await asyncForEach(deleteKeywords, async (keyword: Keyword) => {
                 await transactionClient.keyword.deleteMany({ where: { meta_SEO_id: keyword.meta_SEO_id } })
-                console.log(`this will deleted`, keyword)
             })
 
             await asyncForEach(newKeywords, async (keyword: Keyword) => {
                 await transactionClient.keyword.create({ data: keyword })
-                console.log(`this will added`, keyword);
             })
         }
 

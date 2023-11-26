@@ -5,9 +5,9 @@ import { User } from '@prisma/client';
 const prismaWithExtensions = prisma.$extends({
   model: {
     user: {
-      async isUserExists(id: string): Promise<Partial<User> | null> {
+      async isUserExists(email: string): Promise<Partial<User> | null> {
         // Implement your logic to check if a user with the given ID exists.
-        const user = await prisma.user.findUnique({ where: { id } });
+        const user = await prisma.user.findUnique({ where: { email } });
         return user;
       },
 

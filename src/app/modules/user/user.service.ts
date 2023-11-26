@@ -17,9 +17,9 @@ const createCustomer = async (
   nameData: Name,
   customerData: Customer,
   userData: User
-): Promise<{ message: string }> => {
+): Promise<User | null> => {
 
-  await prisma.$transaction(async transectionClient => {
+  const result = await prisma.$transaction(async transectionClient => {
     // set role
     userData.role = `customer`;
 
@@ -50,7 +50,6 @@ const createCustomer = async (
       throw new ApiError(httpStatus.OK, `failed to create new admin`);
     }
 
-    console.log(customerCreation);
     // admin id passs to the user table
     userData.customer_id = customerCreation.uid;
     userData.id = customerCreation.id;
@@ -66,23 +65,26 @@ const createCustomer = async (
         },
       },
     });
-    console.log(`user created`, userCreation);
 
     if (!userCreation) {
       throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
     }
+
+    return userCreation;
   });
 
-  return { message: `user created successfully` };
+  const get = await prisma.user.findUnique({ where: { id: result.id } })
+
+  return get;
 };
 
 const createAdmin = async (
   nameData: Name,
   adminData: Admin,
   userData: User
-): Promise<{ message: string }> => {
+): Promise<User | null> => {
 
-  await prisma.$transaction(async transectionClient => {
+  const result = await prisma.$transaction(async transectionClient => {
     // set role
     userData.role = `admin`;
 
@@ -90,8 +92,6 @@ const createAdmin = async (
     if (!userData.password) {
       userData.password = config.default_admin_pass as string;
     }
-
-    console.log(`from line 32`, userData);
 
     // generate user id
     const id = await generateAdminId();
@@ -114,12 +114,10 @@ const createAdmin = async (
       throw new ApiError(httpStatus.OK, `failed to create new admin`);
     }
 
-    console.log(adminCreation);
+    
     // admin id passs to the user table
     userData.admin_id = adminCreation.uid;
     userData.id = adminCreation.id;
-
-    console.log(userData);
 
     const userCreation = await transectionClient.user.create({
       data: userData,
@@ -135,9 +133,12 @@ const createAdmin = async (
     if (!userCreation) {
       throw new ApiError(httpStatus.BAD_REQUEST, `user creation failed`);
     }
+
+    return userCreation;
   });
 
-  return { message: `user created successfully` };
+  const get = await prisma.user.findUnique({ where: { id: result.id }, include: { admin: true } })
+  return get;
 };
 
 

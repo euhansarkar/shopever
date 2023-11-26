@@ -65,8 +65,8 @@ const getAll = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            created_at: 'desc',
-          },
+          created_at: 'desc',
+        },
   });
   const total = await prisma.admin.count({
     where: whereConditions,
@@ -99,8 +99,9 @@ const getOne = async (id: string): Promise<Admin | null> => {
 const updateOne = async (
   id: string,
   nameData: Partial<Name>,
-  AdminData: Partial<Admin>
+  adminData: Partial<Admin>
 ): Promise<Admin | null> => {
+
   const isExist = await prisma.admin.findUnique({ where: { id } });
 
   if (!isExist) {
@@ -108,18 +109,20 @@ const updateOne = async (
   }
 
   await prisma.$transaction(async transectionClient => {
+
     await transectionClient.name.update({
       where: {
         id: isExist.name_id,
       },
-      data: { ...nameData },
+      data: nameData,
     });
 
     await transectionClient.admin.update({
       where: {
         id: isExist.id, // Update based on the unique Admin id
       },
-      data: { ...AdminData },
+      data: adminData,
+      include: { name: true }
     });
   });
 
@@ -143,11 +146,7 @@ const deleteOne = async (id: string): Promise<Admin | null> => {
   }
 
   const result = await prisma.$transaction(async transactionClient => {
-    await transactionClient.name.delete({
-      where: {
-        id: isExist.name_id,
-      },
-    });
+    await transactionClient.name.delete({ where: { id: isExist.name_id }, include: { admins: true, customer: true } })
 
     await transactionClient.admin.delete({
       where: {

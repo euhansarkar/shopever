@@ -3,7 +3,6 @@ import { bloodGroup, gender } from './admin.constant';
 
 const updateAdminZodSchema = z.object({
   body: z.object({
-    password: z.string().optional(),
     name: z.object({
       first_name: z.string().optional(),
       middle_name: z.string().optional(),
@@ -12,7 +11,6 @@ const updateAdminZodSchema = z.object({
     admin: z.object({
       gender: z.enum([...gender] as [string, ...string[]]).optional(),
       date_of_birth: z.string().optional(),
-      email: z.string().email('Invalid email address').optional(),
       contact_no: z.string().optional(),
       emergency_contact_no: z.string().min(10, 'Emergency contact number is required').optional(),
       blood_group: z.enum([...bloodGroup] as [string, ...string[]]).optional(),

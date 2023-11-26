@@ -6,7 +6,7 @@ export const AdminRelationalFieldsMapper: { [key: string]: string } = {
   managementDepartment: `managementDepartmentId`,
 };
 
-export const AdminFilterableFields = [`searchTerm`, `gender`, `contactNo`];
+export const AdminFilterableFields = [`searchTerm`, `gender`, `contact_no`];
 
 export const userSearchableFields: Array<string> = [`role`];
 export const userFilterableFields: Array<string> = [`searchTerm`, `id`, `role`];

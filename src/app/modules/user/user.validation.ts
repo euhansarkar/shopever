@@ -4,6 +4,7 @@ import { bloodGroup, gender } from './user.constant';
 const createCustomerZodSchema = z.object({
   body: z.object({
     password: z.string().optional(),
+    email: z.string().email('Invalid email address'),
     name: z.object({
       first_name: z.string({
         required_error: 'First name is required',
@@ -14,7 +15,7 @@ const createCustomerZodSchema = z.object({
       }),
     }),
     customer: z.object({
-      email: z.string().email('Invalid email address'),
+      country: z.string({ required_error: `country is required` }),
     }),
   }),
 });
@@ -39,7 +40,6 @@ const createAdminZodSchema = z.object({
       date_of_birth: z.string({
         required_error: `date fo birth is required`,
       }),
-      email: z.string().email('Invalid email address'),
       contact_no: z.string({
         required_error: `contact is required`,
       }),

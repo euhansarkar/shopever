@@ -14,10 +14,10 @@ import bcrypt from 'bcrypt';
 import prisma from '../../../shared/prisma';
 
 const login = async (data: ILogin): Promise<ILoginResponse> => {
-  const { id, password } = data;
+  const { email, password } = data;
 
   // check user exists
-  const isUserExist = await prismaWithExtensions.user.isUserExists(id);
+  const isUserExist = await prismaWithExtensions.user.isUserExists(email);
 
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `user not found`);
@@ -29,6 +29,7 @@ const login = async (data: ILogin): Promise<ILoginResponse> => {
     isUserExist.password!
   );
 
+
   if (!isPasswordMatched) {
     throw new ApiError(httpStatus.UNAUTHORIZED, `password is incorrect`);
   }
@@ -36,13 +37,13 @@ const login = async (data: ILogin): Promise<ILoginResponse> => {
   // create access token and refresh token
 
   const accessToken = jwtHelpers.createToken(
-    { id: isUserExist?.id, role: isUserExist?.role },
+    { id: isUserExist?.id, email: isUserExist?.email, role: isUserExist?.role },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
 
   const refreshToken = jwtHelpers.createToken(
-    { id: isUserExist?.id, role: isUserExist?.role },
+    { id: isUserExist?.id, email: isUserExist?.email, role: isUserExist?.role },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   );
@@ -66,10 +67,10 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
     throw new ApiError(httpStatus.FORBIDDEN, `invalid refresh token`);
   }
 
-  const { id } = verifiedToken;
+  const { email } = verifiedToken;
 
   // check is user deleted or not on database
-  const isUserExist = await prismaWithExtensions.user.isUserExists(id);
+  const isUserExist = await prismaWithExtensions.user.isUserExists(email);
 
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `user not found`);
@@ -78,11 +79,13 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   const newAccessToken = jwtHelpers.createToken(
     {
       id: isUserExist.id,
+      email: isUserExist.email,
       role: isUserExist.role,
     },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
+
 
   return { accessToken: newAccessToken };
 };
@@ -91,12 +94,12 @@ const changePassword = async (
   userData: JwtPayload | null,
   passwordData: IChangePassword
 ): Promise<{ message: string }> => {
-  console.log(userData);
-  const { id } = userData!;
+
+  const { email } = userData!;
   const { oldPassword, newPassword } = passwordData!;
 
   // checking is user exists
-  const isUserExist = await prismaWithExtensions.user.isUserExists(id);
+  const isUserExist = await prismaWithExtensions.user.isUserExists(email);
 
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `user not found`);
@@ -119,13 +122,13 @@ const changePassword = async (
 
   const updatedData = {
     password: newHashPassword,
-    needsPasswordChange: false,
-    passwordChangeAt: new Date(),
+    needs_password_change: false,
+    password_change_at: new Date(),
   };
 
   await prisma.user.update({
     where: {
-      id: isUserExist.id,
+      email: isUserExist.email,
     },
     data: updatedData,
   });

@@ -64,6 +64,9 @@ const getAll = async (
         : {
           created_at: 'desc',
         },
+    include: {
+      name: true
+    }
   });
   const total = await prisma.customer.count({
     where: whereConditions,

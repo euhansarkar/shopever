@@ -8,6 +8,10 @@ import { AttributeGroupRouter } from '../modules/attributeGroup/attributeGroup.r
 import { AttributeRouter } from '../modules/attribute/attribute.router';
 import { CategoryRouter } from '../modules/category/category.router';
 import { ProductRouter } from '../modules/product/product.router';
+import { PaymentMethodRouter } from '../modules/paymentMethod/paymentMethod.router';
+import { ShippingMethodRouter } from '../modules/shippingMethod/shippingMethod.router';
+import { CollectionRouter } from '../modules/collection/collection.router';
+import { CMSRouter } from '../modules/CMS/CMS.router';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -46,6 +50,26 @@ const moduleRoutes = [
   {
     path: '/products',
     route: ProductRouter,
+  },
+  {
+    path: '/payment-methods',
+    route: PaymentMethodRouter,
+  },
+  {
+    path: '/shipping-methods',
+    route: ShippingMethodRouter,
+  },
+  {
+    path: '/collections',
+    route: CollectionRouter,
+  },
+  {
+    path: '/cmss',
+    route: CMSRouter,
+  },
+  {
+    path: '/auth',
+    route: AuthRouter,
   }
 ];
 
