@@ -22,7 +22,7 @@ model User {
   customer_id              String?
   customer                 Customer?            @relation(fields: [customer_id], references: [uid])
   user_coupon_condition    UserCouponCondition? @relation(fields: [user_coupon_condition_id], references: [id])
-  user_coupon_condition_id String?              
+  user_coupon_condition_id String?
 
   @@map("users")
 }
@@ -38,14 +38,19 @@ model ManagementDepartment {
 }
 
 model Customer {
-  uid        String   @id @default(uuid())
-  id         String   @unique
-  name_id    String
-  name       Name     @relation(fields: [name_id], references: [id])
-  created_at DateTime @default(now())
-  country    String?
-  updated_at DateTime @updatedAt
-  users      User[]
+  uid              String            @id @default(uuid())
+  id               String            @unique
+  name_id          String
+  name             Name              @relation(fields: [name_id], references: [id])
+  created_at       DateTime          @default(now())
+  country          String?
+  gender           String?
+  date_of_birth    String?
+  contact_no       String?
+  profile_image    String?
+  updated_at       DateTime          @updatedAt
+  users            User[]
+  customer_address CustomerAddress[]
 
   @@map("customers")
 }
@@ -254,22 +259,14 @@ model ProductAttributeValue {
 
 // when user clicks on the addToCart button items will be added in the localStorage/cookie
 
-model CustomerInfo {
-  id                 String            @id @default(uuid())
-  email              String
-  customer_addresses CustomerAddress[]
-  created_at         DateTime          @default(now())
-  updated_at         DateTime          @updatedAt
-}
-
 model CustomerAddress {
-  id               String        @id @default(uuid())
-  type             AddressType
-  customer_info    CustomerInfo? @relation(fields: [customer_info_id], references: [id])
-  customer_info_id String?
-  addresses        Address[]
-  created_at       DateTime      @default(now())
-  updated_at       DateTime      @updatedAt
+  id           String      @id @default(uuid())
+  type         AddressType
+  addresses    Address[]
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  Customer     Customer?   @relation(fields: [customer_Uid], references: [uid])
+  customer_Uid String
 }
 
 model Address {

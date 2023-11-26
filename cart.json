@@ -1,0 +1,50 @@
+{
+  "name": "Product Name",
+  "description": "Product Description",
+  "short_description": "Short Product Description",
+  "status": true,
+  "sku": "ABC123",
+  "price": 29.99,
+  "weight": 1.5,
+  "qty": 100,
+  "manage_stock": 1,
+  "stock_availability": 1,
+  "tax_class": true,
+  "visibility": true,
+  "attribute_group_id": "9deb6f92-a506-4a78-add5-eea7b7379694",
+  "category_id": "9c8f4ea1-722c-4c3f-ba15-b6751f49b94f",
+  "images": [
+    {
+      "image_url": "https://example.com/image1.jpg"
+    },
+    {
+      "image_url": "https://example.com/image2.jpg"
+    }
+  ],
+  "meta_seo": {
+    "parent_id": "parent_789",
+    "meta_title": "Meta Title",
+    "meta_description": "Meta Description",
+    "url_key": "meta-url-key"
+  },
+  "product_attributes": [
+    {
+      "attribute_id": "13afada5-ebbb-420b-b057-e78db8b677f6",
+      "product_attribute_values": [
+        {
+          "attribute_option_id": "48fcd7a1-fdb0-407a-a225-0261590306ea",
+          "extra_price": 8.99
+        }
+      ]
+    },
+    {
+      "attribute_id": "e19359f2-6667-44fd-9337-e18cb3a9ba67",
+      "product_attribute_values": [
+        {
+          "attribute_option_id": "abc4a186-338d-427d-b3f1-fea10e0d1f59",
+          "extra_price": 0.99
+        }
+      ]
+    }
+  ]
+}

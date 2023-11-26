@@ -254,6 +254,11 @@
             "date": 1701021653377,
             "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-27-11-00-success.log",
             "hash": "1a97381eae088a265abd2bbaa199e9dfcb3209ad43f735ce38b0ec6192ae17fc"
+        },
+        {
+            "date": 1701025747193,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-27-11-01-success.log",
+            "hash": "33255c29da3145f3b73d384015071201adf402a2cbf35e1cf58a379e38fad6f9"
         }
     ],
     "hashType": "sha256"
