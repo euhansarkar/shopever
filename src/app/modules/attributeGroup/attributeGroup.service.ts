@@ -47,7 +47,8 @@ const getAll = async (filters: IAttributeGroupFilterRequest, options: IPaginatio
             ? { [options.sortBy]: options.sortOrder }
             : {
                 created_at: 'desc'
-            }
+            },
+        include: { attributes: { include: { attribute_options: true } } }
     })
     const total = await prisma.attributeGroup.count({
         where: whereConditions
@@ -62,8 +63,9 @@ const getAll = async (filters: IAttributeGroupFilterRequest, options: IPaginatio
 
 const getOne = async (id: string): Promise<AttributeGroup | null> => {
     const result = await prisma.attributeGroup.findUnique({
-        where: { id }
+        where: { id }, include: { attributes: { include: { attribute_options: true } } },
     })
+    console.log(result);
     return result;
 }
 

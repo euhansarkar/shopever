@@ -7,9 +7,9 @@ import { ProductSearchableFields } from "./product.constant";
 
 const createProduct = catchAsync(async (req, res) => {
 
-    const { images, meta_seo, product_attributes, ...productData } = req.body;
+    const { meta_seo, ...productData } = req.body;
 
-    const result = await ProductService.createOne(productData, images, meta_seo, product_attributes);
+    const result = await ProductService.createOne(productData, meta_seo);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -43,8 +43,8 @@ const getOne = catchAsync(async (req, res) => {
 })
 
 const updateOne = catchAsync(async (req, res) => {
-    const { images, meta_seo, product_attributes, ...productData } = req.body;
-    const result = await ProductService.updateOne(req.params.id, productData, images, meta_seo, product_attributes);
+    const { meta_seo, ...productData } = req.body;
+    const result = await ProductService.updateOne(req.params.id, productData, meta_seo);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

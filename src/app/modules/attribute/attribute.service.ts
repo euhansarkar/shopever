@@ -1,4 +1,4 @@
-import { Attribute, AttributeOption, Prisma } from "@prisma/client";
+import { Attribute, AttributeOption, Prisma, PrismaClient } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import { IAttributeFilterRequest } from "./attribute.interface";
 import { IPaginationOptions } from "../../../interfaces/pagination";
@@ -61,7 +61,7 @@ const getAll = async (filters: IAttributeFilterRequest, options: IPaginationOpti
         where: whereConditions,
         skip,
         take: limit,
-        include: { attribute_options: true },
+        include: { attribute_group: true, attribute_options: true, },
         orderBy:
             options.sortBy && options.sortOrder
                 ? { [options.sortBy]: options.sortOrder }
@@ -97,26 +97,59 @@ const getOne = async (id: string): Promise<Attribute | null> => {
 const updateOne = async (id: string, attributeData: Partial<Attribute>, attribute_options: AttributeOption[] | null): Promise<Attribute | null> => {
 
     const result = await prisma.$transaction(async (transectionClient) => {
-        
+
         const attResult = await transectionClient.attribute.update({ where: { id }, data: attributeData });
 
         if (attribute_options && attribute_options.length > 0) {
-           
+
             const deleteOptions = attribute_options.filter(option => option.option_text && option.is_deleted);
+            console.log(`deleted options ###`, deleteOptions);
+
 
             const newOptions = attribute_options.filter(option => option.option_text && !option.is_deleted);
 
-            await asyncForEach(deleteOptions, async (option: AttributeOption) => {
-                await transectionClient.attributeOption.deleteMany({ where: { attribute_id: option.attribute_id } })
+            // ready for update 
+            const readyForUpdate = newOptions.filter(option => option.id && option.option_text && !option.is_deleted);
+
+            // ready for create
+            const readyForCreate = newOptions.filter(option => !option.id && option.option_text && !option.is_deleted);
+
+
+            await asyncForEach(readyForUpdate, async (option: AttributeOption) => {
+                try {
+
+                    await transectionClient.attributeOption.update({
+                        where: { id: option.id },
+                        data: { option_text: option.option_text }
+                    })
+                } catch (error) {
+                    console.error(error);
+                }
             })
 
-            await asyncForEach(newOptions, async (option: AttributeOption) => {
-                await transectionClient.attributeOption.create({
-                    data: {  ...option, attribute_id: attResult.id }
-                })
+
+
+            await asyncForEach(deleteOptions, async (option: AttributeOption) => {
+                try {
+                    await transectionClient.attributeOption.delete({ where: { id: option.id } })
+                } catch (error) {
+
+                    console.error(`error`, error);
+                }
+            })
+
+
+            await asyncForEach(readyForCreate, async (option: AttributeOption) => {
+                try {
+                    await transectionClient.attributeOption.create({
+                        data: { ...option, attribute_id: attResult.id }
+                    })
+                } catch (error) {
+                    console.log(`error`, error)
+                }
             })
         }
-        
+
         return attResult;
     })
 

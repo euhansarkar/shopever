@@ -6,9 +6,20 @@ import { IGenericResponse } from "../../../interfaces/common";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { categoryRelationalFields, categoryRelationalFieldsMapper, categorySearchableFields } from "./category.constant";
 import { asyncForEach } from '../../../shared/utils';
+import { FileUploadHeler } from "../../../helpers/fileUploadHelper";
+import { Request } from "express";
 
 
-const createOne = async (categoryData: Category, keywords: Keyword[], images: Image[], metaSEO: MetaSEO): Promise<Category> => {
+const createOne = async (req: Request): Promise<Category | null> => {
+
+    const file = req.file as IFile;
+    const uploadedImage = await FileUploadHeler.uploadToCloudinary(file) as ICloudinary;
+
+    if (uploadedImage) {
+        req.body.images = [{ image_url: uploadedImage.secure_url }]
+    }
+
+    const { images, metaSEO, keywords, ...categoryData } = req.body;
 
     const result = await prisma.$transaction(async (transactionClient) => {
         // meta SEO creation 
@@ -34,7 +45,8 @@ const createOne = async (categoryData: Category, keywords: Keyword[], images: Im
     });
 
     const get = await prisma.category.findUnique({ where: { id: result.id }, include: { images: true, Meta_SEO: true } })
-    return result;
+
+    return get;
 }
 
 const getAll = async (filters: ICategoryFilterRequest, options: IPaginationOptions): Promise<IGenericResponse<Category[]>> => {

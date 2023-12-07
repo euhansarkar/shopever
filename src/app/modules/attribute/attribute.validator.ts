@@ -17,7 +17,7 @@ const create = z.object({
         display_on_frontend: z.boolean({
             required_error: `display on frontend value is required`
         }),
-        sort_order: z.boolean({
+        sort_order: z.number({
             required_error: `sort order value is required`
         }),
         is_filterable: z.boolean({
@@ -26,7 +26,7 @@ const create = z.object({
         attribute_group_id: z.string({ required_error: `attribute group id is required` }),
         attribute_options: z.array(
             z.object({
-                option_text: z.string({ required_error: `option text is required` })
+                option_text: z.string({ required_error: `option text is required` }),
             })
         )
     })
@@ -44,7 +44,7 @@ const update = z.object({
         type: z.string().optional(),
         is_required: z.boolean().optional(),
         display_on_frontend: z.boolean().optional(),
-        sort_order: z.boolean().optional(),
+        sort_order: z.number().optional(),
         is_filterable: z.boolean().optional(),
         attribute_options: z.array(attOption).optional(),
     }),

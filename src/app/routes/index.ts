@@ -1,17 +1,20 @@
 import express from 'express';
-import { UserRouter } from '../modules/user/user.route';
-import { AdminRouter } from '../modules/admin/admin.router';
-import { AuthRouter } from '../modules/auth/auth.router';
-import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
-import { CustomerRouter } from '../modules/customer/customer.router';
-import { AttributeGroupRouter } from '../modules/attributeGroup/attributeGroup.router';
-import { AttributeRouter } from '../modules/attribute/attribute.router';
-import { CategoryRouter } from '../modules/category/category.router';
-import { ProductRouter } from '../modules/product/product.router';
-import { PaymentMethodRouter } from '../modules/paymentMethod/paymentMethod.router';
-import { ShippingMethodRouter } from '../modules/shippingMethod/shippingMethod.router';
-import { CollectionRouter } from '../modules/collection/collection.router';
 import { CMSRouter } from '../modules/CMS/CMS.router';
+import { AdminRouter } from '../modules/admin/admin.router';
+import { AttributeRouter } from '../modules/attribute/attribute.router';
+import { AttributeGroupRouter } from '../modules/attributeGroup/attributeGroup.router';
+import { AttributeOptionRouter } from '../modules/attributeOption/attributeOption.router';
+import { AuthRouter } from '../modules/auth/auth.router';
+import { CategoryRouter } from '../modules/category/category.router';
+import { CollectionRouter } from '../modules/collection/collection.router';
+import { CustomerRouter } from '../modules/customer/customer.router';
+import { ManagementDepartmentRouter } from '../modules/managementDepartment/managementDepartment.router';
+import { PaymentMethodRouter } from '../modules/paymentMethod/paymentMethod.router';
+import { ProductRouter } from '../modules/product/product.router';
+import { ShippingMethodRouter } from '../modules/shippingMethod/shippingMethod.router';
+import { UserRouter } from '../modules/user/user.route';
+import { VarientRouter } from '../modules/varient/varient.router';
+
 const router = express.Router();
 
 const moduleRoutes = [
@@ -70,6 +73,14 @@ const moduleRoutes = [
   {
     path: '/auth',
     route: AuthRouter,
+  },
+  {
+    path: '/attribute-options',
+    route: AttributeOptionRouter,
+  },
+  {
+    path: '/varients',
+    route: VarientRouter,
   }
 ];
 

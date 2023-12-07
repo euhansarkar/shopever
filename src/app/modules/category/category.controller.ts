@@ -6,8 +6,8 @@ import pick from "../../../shared/pick";
 import { categoryFilterableFields } from "./category.constant";
 
 const createOne = catchAsync(async (req, res) => {
-    const { images, metaSEO, keywords, ...categoryData } = req.body;
-    const result = await CategoryService.createOne(categoryData, keywords, images, metaSEO);
+
+    const result = await CategoryService.createOne(req);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

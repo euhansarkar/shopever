@@ -97,7 +97,7 @@ model Category {
   description    String
   status         Boolean
   include_in_nav Boolean
-  parent_id      Int
+  parent_id      String?
   position       Int
   Meta_SEO       MetaSEO?  @relation(fields: [meta_SEO_id], references: [id])
   meta_SEO_id    String?
@@ -105,6 +105,8 @@ model Category {
   products       Product[]
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
+
+  @@map("categories")
 }
 
 model MetaSEO {
@@ -119,6 +121,8 @@ model MetaSEO {
   updated_at       DateTime   @updatedAt
   products         Product[]
   CMSs             CMS[]
+
+  @@map("meta_SEOs")
 }
 
 model Keyword {
@@ -129,6 +133,8 @@ model Keyword {
   isDeleted   Boolean?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("keywords")
 }
 
 model Image {
@@ -136,11 +142,14 @@ model Image {
   image_url   String
   category    Category? @relation(fields: [category_id], references: [id])
   category_id String?
-  product     Product?  @relation(fields: [product_id], references: [id])
   product_id  String?
   isDeleted   Boolean?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+  Varient     Varient?  @relation(fields: [varient_id], references: [id])
+  varient_id  String?
+
+  @@map("images")
 }
 
 model AttributeGroup {
@@ -150,112 +159,89 @@ model AttributeGroup {
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   attributes Attribute[]
+
+  @@map("attribute_groups")
 }
 
 model Attribute {
-  id                  String             @id @default(uuid())
+  id                  String            @id @default(uuid())
   attribute_name      String
   attribute_code      String
   type                String
   is_required         Boolean
   display_on_frontend Boolean
-  sort_order          Boolean
   is_filterable       Boolean
-  created_at          DateTime           @default(now())
-  updated_at          DateTime           @updatedAt
-  attribute_group     AttributeGroup     @relation(fields: [attribute_group_id], references: [id])
+  sort_order          Int
+  created_at          DateTime          @default(now())
+  updated_at          DateTime          @updatedAt
+  attribute_group     AttributeGroup    @relation(fields: [attribute_group_id], references: [id])
   attribute_group_id  String
   attribute_options   AttributeOption[]
-  productAttribute    ProductAttribute[]
+
+  @@map("attributes")
 }
 
 model AttributeOption {
-  id                    String                  @id @default(uuid())
-  option_text           String
-  attribute             Attribute?              @relation(fields: [attribute_id], references: [id])
-  attribute_id          String
-  is_deleted            Boolean?
-  created_at            DateTime                @default(now())
-  updated_at            DateTime                @updatedAt
-  ProductAttributeValue ProductAttributeValue[]
-}
+  id           String     @id @default(uuid())
+  option_text  String
+  attribute    Attribute? @relation(fields: [attribute_id], references: [id])
+  attribute_id String
+  is_deleted   Boolean?   @default(false)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
 
-model AttributeGroupCode {
-  id                 String   @id @default(uuid())
-  attribute_group_id String
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
-}
-
-model VarientGroup {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  @@map("attribute_options")
 }
 
 model Product {
-  id                 String             @id @default(uuid())
+  id                 String          @id @default(uuid())
   name               String
   description        String
-  short_description  String
-  status             Boolean
-  sku                String
-  price              Float
-  weight             Float
-  qty                Int
-  manage_stock       Int
-  stock_availability Int
-  tax_class          Boolean
-  visibility         Boolean
-  attribute_group    AttributeGroup?    @relation(fields: [attribute_group_id], references: [id])
+  sku                String          @unique
+  manage_stock       Boolean         @default(false)
+  stock_availability Boolean         @default(false)
+  tax_class          Boolean         @default(false)
+  attribute_group    AttributeGroup? @relation(fields: [attribute_group_id], references: [id])
   attribute_group_id String?
-  category           Category?          @relation(fields: [category_id], references: [id])
+  category           Category?       @relation(fields: [category_id], references: [id])
   category_id        String?
-  meta_SEO           MetaSEO            @relation(fields: [meta_SEO_id], references: [id])
+  meta_SEO           MetaSEO         @relation(fields: [meta_SEO_id], references: [id])
   meta_SEO_id        String
-  images             Image[]
-  product_attributes ProductAttribute[]
-  created_at         DateTime           @default(now())
-  updated_at         DateTime           @updatedAt
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+  varients           Varient[]
   collections        Collection[]
-  ProductID          ProductID[]
+
+  @@map("products")
 }
 
-model ProductAttribute {
-  id                    String                  @id @default(uuid())
-  attribute             Attribute               @relation(fields: [attribute_id], references: [id])
-  attribute_id          String
-  product               Product?                @relation(fields: [product_id], references: [id])
-  product_id            String?
-  is_deleted            Boolean?
-  created_at            DateTime                @default(now())
-  updated_at            DateTime                @updatedAt
-  ProductAttributeValue ProductAttributeValue[]
+model Varient {
+  id              String          @id @default(uuid())
+  sku             String          @unique
+  qty             Int             @default(0)
+  price           Float           @default(0)
+  weight          Float           @default(0)
+  status          Boolean         @default(false)
+  visibility      Boolean         @default(false)
+  product         Product?        @relation(fields: [product_id], references: [id])
+  product_id      String?
+  images          Image[]
+  varient_options VarientOption[]
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+
+  @@map("varients")
 }
 
-model ProductAttributeValue {
-  id                   String           @id @default(uuid())
-  productAttribute     ProductAttribute @relation(fields: [product_attribute_id], references: [id])
-  product_attribute_id String
-  attribute_option     AttributeOption  @relation(fields: [attribute_option_id], references: [id])
-  attribute_option_id  String
-  extra_price          Float
-  is_deleted           Boolean?
-  created_at           DateTime         @default(now())
-  updated_at           DateTime         @updatedAt
-}
+model VarientOption {
+  id             String   @id @default(uuid())
+  attribute_name String
+  option_id      String
+  Varient        Varient? @relation(fields: [varient_id], references: [id])
+  varient_id     String?
 
-// model ProductAttributeOption {
-//   id                              String                        @id @default(uuid())
-//   option_name                     String
-//   option_type                     String
-//   is_required                     Boolean
-//   product                         Product?                      @relation(fields: [product_id], references: [id])
-//   product_id                      String?
-//   product_attribute_option_values ProductAttributeOptionValue[]
-//   created_at                      DateTime                      @default(now())
-//   updated_at                      DateTime                      @updatedAt
-// }
+  @@map("varient_options")
+}
 
 // when user clicks on the addToCart button items will be added in the localStorage/cookie
 
@@ -267,6 +253,8 @@ model CustomerAddress {
   updated_at   DateTime    @updatedAt
   Customer     Customer?   @relation(fields: [customer_Uid], references: [uid])
   customer_Uid String
+
+  @@map("customer_addresses")
 }
 
 model Address {
@@ -283,6 +271,8 @@ model Address {
   customer_address_id String?
   created_at          DateTime         @default(now())
   updated_at          DateTime         @updatedAt
+
+  @@map("addresses")
 }
 
 model ShippingMethod {
@@ -291,6 +281,8 @@ model ShippingMethod {
   method_code String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("shipping_methods")
 }
 
 model PaymentMethod {
@@ -299,6 +291,8 @@ model PaymentMethod {
   method_code String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("payment_methods")
 }
 
 model Coupon {
@@ -320,6 +314,8 @@ model Coupon {
   target_coupon_products     TargetCouponProduct[]
   created_at                 DateTime              @default(now())
   updated_at                 DateTime              @updatedAt
+
+  @@map("coupons")
 }
 
 model TargetCouponProduct {
@@ -330,6 +326,8 @@ model TargetCouponProduct {
   coupon_id       String?
   created_at      DateTime        @default(now())
   updated_at      DateTime        @updatedAt
+
+  @@map("target_coupon_products")
 }
 
 model CouponProduct {
@@ -341,6 +339,8 @@ model CouponProduct {
   target_coupon_product_id String?
   created_at               DateTime             @default(now())
   updated_at               DateTime             @updatedAt
+
+  @@map("coupon_products")
 }
 
 model CouponCondition {
@@ -349,6 +349,8 @@ model CouponCondition {
   order_qty   Int
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("coupon_conditions")
 }
 
 model RequiredCouponProduct {
@@ -359,6 +361,8 @@ model RequiredCouponProduct {
   value      Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  @@map("required_coupon_products")
 }
 
 model UserCouponCondition {
@@ -368,6 +372,8 @@ model UserCouponCondition {
   users      User[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  @@map("user_coupon_conditions")
 }
 
 model Order {
@@ -375,6 +381,8 @@ model Order {
   order_number Int
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+
+  @@map("orders")
 }
 
 model CMS {
@@ -387,6 +395,8 @@ model CMS {
   updated_at DateTime  @updatedAt
   MetaSEO    MetaSEO?  @relation(fields: [metaSEOId], references: [id])
   metaSEOId  String?
+
+  @@map("CMSs")
 }
 
 model Collection {
@@ -398,19 +408,26 @@ model Collection {
   created_at      DateTime    @default(now())
   updated_at      DateTime    @updatedAt
   ProductID       ProductID[]
+
+  @@map("collections")
 }
 
 model ProductID {
   id           String     @id @default(uuid())
-  product      Product    @relation(fields: [productId], references: [id])
-  productId    String
   collection   Collection @relation(fields: [collectionId], references: [id])
   collectionId String
+
+  @@map("product_IDs")
 }
 
 enum AddressType {
   home
   office
+}
+
+model LName {
+  id   String @id @default(uuid())
+  name String
 }
 
 enum CMSLayout {

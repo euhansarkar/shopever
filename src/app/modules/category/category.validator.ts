@@ -13,22 +13,18 @@ const metaSEO = z.object({
     url_key: z.string({ required_error: `url key is required` })
 });
 
-const imageURL = z.object({
-    image_url: z.string({ required_error: `image URL is required` })
-})
 
 const create = z.object({
-    body: z.object({
+    // body: z.object({
         name: z.string({ required_error: `category name is required` }),
         description: z.string({ required_error: `descripotion is required` }),
         status: z.boolean({ required_error: `status is required` }),
         include_in_nav: z.boolean({ required_error: `include in nav is required` }),
-        parent_id: z.number({ required_error: `parent id is required` }),
+        parent_id: z.string().optional(),
         position: z.number({ required_error: `position is required` }),
-        images: z.array(imageURL),
         metaSEO: metaSEO,
         keywords: z.array(keyWord)
-    })
+    // })
 })
 
 // non-strict
