@@ -15,6 +15,7 @@ router.route(`/`)
         (req: Request, res: Response, next: NextFunction) => {
             req.body = VarientValidator.create.parse(JSON.parse
                 (req.body.data))
+                console.log(`this is from varient`,req.body);
             return VarientController.createOne(req, res, next)
         }
     )

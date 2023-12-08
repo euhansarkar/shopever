@@ -6,61 +6,6 @@
     "auditLog": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\.bda2528ea9af3ca3512666e4d7f3b4b0c26fa7d6-audit.json",
     "files": [
         {
-            "date": 1700806555227,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-12-success.log",
-            "hash": "449a459a6b84d778919c6bd6d617289828cdbc729a618baad45012fbc5f92860"
-        },
-        {
-            "date": 1700819725949,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-15-success.log",
-            "hash": "166c6d9431fe7a52e964de5fc75e8212c0c6cf61cc18ae9096abc89bd4f4cdfc"
-        },
-        {
-            "date": 1700820237242,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-16-success.log",
-            "hash": "41f3053baa563170ea459aad76ce280e9ed662994f36e7b76f45687080fb12cb"
-        },
-        {
-            "date": 1700826086462,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-17-success.log",
-            "hash": "31f964c6d9f7886be9ebcf965ac86641ddb35d8bed3606aaa61028e70080da0e"
-        },
-        {
-            "date": 1700827214500,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-18-success.log",
-            "hash": "625294457e17684dd96e570d7a1ff14eb6e1ef4a50b472ca60207ce3efad0e13"
-        },
-        {
-            "date": 1700830806030,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-19-success.log",
-            "hash": "ce754537f60782d79776aa497915ac4901023779f0f1da1fd8b706d3204df8b5"
-        },
-        {
-            "date": 1700834703728,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-20-success.log",
-            "hash": "ad9ead1afc46340888cc443a86fb5d8b0acc11cd40744e3b3547be75ef5692e2"
-        },
-        {
-            "date": 1700841809553,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-24-11-22-success.log",
-            "hash": "d8678ffc5e41fc8d916521dd76f1b1e3c1248a9bf564a05bbf012902f7444e21"
-        },
-        {
-            "date": 1700849315918,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-25-11-00-success.log",
-            "hash": "7b4299338d460a4bb61e989a3b3ccf28bf508fbc5a227cc007f0ab4c146f0b87"
-        },
-        {
-            "date": 1700852402005,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-25-11-01-success.log",
-            "hash": "39cdd24f90ddebb9872456ec64e39e6c8540ef55c6d01cc3c0af2a02b54f1cd1"
-        },
-        {
-            "date": 1700856956697,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-25-11-02-success.log",
-            "hash": "7d735f92df94b9e160e464d116dbdab69fb8d3977dc3ce1d19fb5dd3a5cf7244"
-        },
-        {
             "date": 1700906927156,
             "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-25-11-16-success.log",
             "hash": "b9e1e719af64f39e37e0c0b403c0e83739a563ee940e4371cf13dc0f7cead943"
@@ -399,6 +344,36 @@
             "date": 1701986446017,
             "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-08-12-04-success.log",
             "hash": "5de0c92914d301e2a66bd3ba1c9e0b4f1503200f94c5e2742d8e884d5006ad23"
+        },
+        {
+            "date": 1702020410235,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-08-12-13-success.log",
+            "hash": "4d7b39ed37456013d162cf4c2876998b9b506aecbf9ddaefc91946f50cb77ad3"
+        },
+        {
+            "date": 1702022909434,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-08-12-14-success.log",
+            "hash": "7e149e8aaf04ff19d465226b82adcbd30eb866439a7fba52b21b9aeb88445f1e"
+        },
+        {
+            "date": 1702033661762,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-08-12-17-success.log",
+            "hash": "1728cfbb1772718d3486981a02854f7415bb01b88d287a499aac0adc05f5eea9"
+        },
+        {
+            "date": 1702055106662,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-08-12-23-success.log",
+            "hash": "16b12e6d8455a2479ba064019a416cfb0102d5435b5425a3c43125d2100f11ee"
+        },
+        {
+            "date": 1702068666409,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-09-12-02-success.log",
+            "hash": "be7b62cddfe8dd8bc0da882fac373444f1392dfcef8a084a6dc72cb7bafc5408"
+        },
+        {
+            "date": 1702071332965,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2023-09-12-03-success.log",
+            "hash": "00054d8e39350769d5142f37c552a6e6035f02feb7d41d9e0175741bb4ecff81"
         }
     ],
     "hashType": "sha256"
