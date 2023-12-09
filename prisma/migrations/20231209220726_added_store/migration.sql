@@ -82,7 +82,7 @@ CREATE TABLE "names" (
 );
 
 -- CreateTable
-CREATE TABLE "Category" (
+CREATE TABLE "categories" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -94,11 +94,11 @@ CREATE TABLE "Category" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "MetaSEO" (
+CREATE TABLE "meta_SEOs" (
     "id" TEXT NOT NULL,
     "parent_id" TEXT NOT NULL,
     "meta_title" TEXT NOT NULL,
@@ -107,11 +107,11 @@ CREATE TABLE "MetaSEO" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "MetaSEO_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "meta_SEOs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Keyword" (
+CREATE TABLE "keywords" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "meta_SEO_id" TEXT,
@@ -119,11 +119,11 @@ CREATE TABLE "Keyword" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Keyword_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "keywords_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Image" (
+CREATE TABLE "images" (
     "id" TEXT NOT NULL,
     "image_url" TEXT NOT NULL,
     "category_id" TEXT,
@@ -131,22 +131,23 @@ CREATE TABLE "Image" (
     "isDeleted" BOOLEAN,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "varient_id" TEXT,
 
-    CONSTRAINT "Image_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "images_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "AttributeGroup" (
+CREATE TABLE "attribute_groups" (
     "id" TEXT NOT NULL,
     "group_name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "AttributeGroup_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "attribute_groups_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Attribute" (
+CREATE TABLE "attributes" (
     "id" TEXT NOT NULL,
     "attribute_name" TEXT NOT NULL,
     "attribute_code" TEXT NOT NULL,
@@ -159,11 +160,11 @@ CREATE TABLE "Attribute" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "attribute_group_id" TEXT NOT NULL,
 
-    CONSTRAINT "Attribute_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "attributes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "AttributeOption" (
+CREATE TABLE "attribute_options" (
     "id" TEXT NOT NULL,
     "option_text" TEXT NOT NULL,
     "attribute_id" TEXT NOT NULL,
@@ -171,90 +172,66 @@ CREATE TABLE "AttributeOption" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "AttributeOption_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "attribute_options_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "AttributeGroupCode" (
-    "id" TEXT NOT NULL,
-    "attribute_group_id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "AttributeGroupCode_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "VarientGroup" (
-    "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "VarientGroup_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Product" (
+CREATE TABLE "products" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "short_description" TEXT NOT NULL,
-    "status" BOOLEAN NOT NULL,
     "sku" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
-    "weight" DOUBLE PRECISION NOT NULL,
-    "qty" INTEGER NOT NULL,
-    "manage_stock" INTEGER NOT NULL,
-    "stock_availability" INTEGER NOT NULL,
-    "tax_class" BOOLEAN NOT NULL,
-    "visibility" BOOLEAN NOT NULL,
+    "manage_stock" BOOLEAN NOT NULL DEFAULT false,
+    "stock_availability" BOOLEAN NOT NULL DEFAULT false,
+    "tax_class" BOOLEAN NOT NULL DEFAULT false,
     "attribute_group_id" TEXT,
     "category_id" TEXT,
     "meta_SEO_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ProductAttribute" (
+CREATE TABLE "varients" (
     "id" TEXT NOT NULL,
-    "attribute_id" TEXT NOT NULL,
+    "sku" TEXT NOT NULL,
+    "qty" INTEGER NOT NULL DEFAULT 0,
+    "price" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "weight" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "status" BOOLEAN NOT NULL DEFAULT false,
+    "visibility" BOOLEAN NOT NULL DEFAULT false,
     "product_id" TEXT,
-    "is_deleted" BOOLEAN,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "ProductAttribute_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "varients_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ProductAttributeValue" (
+CREATE TABLE "varient_options" (
     "id" TEXT NOT NULL,
-    "product_attribute_id" TEXT NOT NULL,
-    "attribute_option_id" TEXT NOT NULL,
-    "extra_price" DOUBLE PRECISION NOT NULL,
-    "is_deleted" BOOLEAN,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "attribute_name" TEXT NOT NULL,
+    "option_id" TEXT NOT NULL,
+    "varient_id" TEXT,
 
-    CONSTRAINT "ProductAttributeValue_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "varient_options_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CustomerAddress" (
+CREATE TABLE "customer_addresses" (
     "id" TEXT NOT NULL,
     "type" "AddressType" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "customer_Uid" TEXT NOT NULL,
 
-    CONSTRAINT "CustomerAddress_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "customer_addresses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Address" (
+CREATE TABLE "addresses" (
     "id" TEXT NOT NULL,
     "full_name" TEXT NOT NULL,
     "telephone" TEXT NOT NULL,
@@ -268,33 +245,33 @@ CREATE TABLE "Address" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "addresses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ShippingMethod" (
+CREATE TABLE "shipping_methods" (
     "id" TEXT NOT NULL,
     "method_name" TEXT NOT NULL,
     "method_code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "ShippingMethod_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "shipping_methods_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "PaymentMethod" (
+CREATE TABLE "payment_methods" (
     "id" TEXT NOT NULL,
     "method_name" TEXT NOT NULL,
     "method_code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "PaymentMethod_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "payment_methods_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Coupon" (
+CREATE TABLE "coupons" (
     "id" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL,
     "description" TEXT NOT NULL,
@@ -313,22 +290,22 @@ CREATE TABLE "Coupon" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Coupon_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "coupons_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "TargetCouponProduct" (
+CREATE TABLE "target_coupon_products" (
     "id" TEXT NOT NULL,
     "maxQTy" INTEGER NOT NULL,
     "coupon_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "TargetCouponProduct_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "target_coupon_products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CouponProduct" (
+CREATE TABLE "coupon_products" (
     "id" TEXT NOT NULL,
     "key" TEXT NOT NULL,
     "operator" TEXT NOT NULL,
@@ -337,22 +314,22 @@ CREATE TABLE "CouponProduct" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "CouponProduct_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "coupon_products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CouponCondition" (
+CREATE TABLE "coupon_conditions" (
     "id" TEXT NOT NULL,
     "order_total" INTEGER NOT NULL,
     "order_qty" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "CouponCondition_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "coupon_conditions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "RequiredCouponProduct" (
+CREATE TABLE "required_coupon_products" (
     "id" TEXT NOT NULL,
     "key" TEXT NOT NULL,
     "operator" TEXT NOT NULL,
@@ -361,32 +338,32 @@ CREATE TABLE "RequiredCouponProduct" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "RequiredCouponProduct_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "required_coupon_products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UserCouponCondition" (
+CREATE TABLE "user_coupon_conditions" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "parchased" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "UserCouponCondition_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "user_coupon_conditions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Order" (
+CREATE TABLE "orders" (
     "id" TEXT NOT NULL,
     "order_number" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CMS" (
+CREATE TABLE "CMSs" (
     "id" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL,
     "layout" "CMSLayout" NOT NULL,
@@ -396,11 +373,11 @@ CREATE TABLE "CMS" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "metaSEOId" TEXT,
 
-    CONSTRAINT "CMS_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CMSs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Collection" (
+CREATE TABLE "collections" (
     "id" TEXT NOT NULL,
     "collection_name" TEXT NOT NULL,
     "collection_code" TEXT NOT NULL,
@@ -408,16 +385,30 @@ CREATE TABLE "Collection" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Collection_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "collections_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ProductID" (
+CREATE TABLE "product_IDs" (
     "id" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
     "collectionId" TEXT NOT NULL,
 
-    CONSTRAINT "ProductID_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "product_IDs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Store" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL DEFAULT 'evershop',
+    "description" TEXT NOT NULL,
+    "logo" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL DEFAULT '01234-567890',
+    "email" TEXT NOT NULL DEFAULT 'evershop@gmail.com',
+    "country" TEXT NOT NULL DEFAULT 'bangladesh',
+    "city" TEXT NOT NULL DEFAULT 'rajshahi',
+    "postalCode" TEXT NOT NULL DEFAULT '6000',
+
+    CONSTRAINT "Store_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -453,6 +444,12 @@ CREATE UNIQUE INDEX "admins_id_key" ON "admins"("id");
 CREATE UNIQUE INDEX "admins_contact_no_key" ON "admins"("contact_no");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "products_sku_key" ON "products"("sku");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "varients_sku_key" ON "varients"("sku");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_CollectionToProduct_AB_unique" ON "_CollectionToProduct"("A", "B");
 
 -- CreateIndex
@@ -465,7 +462,7 @@ ALTER TABLE "users" ADD CONSTRAINT "users_admin_id_fkey" FOREIGN KEY ("admin_id"
 ALTER TABLE "users" ADD CONSTRAINT "users_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "customers"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_user_coupon_condition_id_fkey" FOREIGN KEY ("user_coupon_condition_id") REFERENCES "UserCouponCondition"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_user_coupon_condition_id_fkey" FOREIGN KEY ("user_coupon_condition_id") REFERENCES "user_coupon_conditions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "customers" ADD CONSTRAINT "customers_name_id_fkey" FOREIGN KEY ("name_id") REFERENCES "names"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -477,67 +474,58 @@ ALTER TABLE "admins" ADD CONSTRAINT "admins_name_id_fkey" FOREIGN KEY ("name_id"
 ALTER TABLE "admins" ADD CONSTRAINT "admins_management_department_id_fkey" FOREIGN KEY ("management_department_id") REFERENCES "management_departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "MetaSEO"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "categories" ADD CONSTRAINT "categories_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "meta_SEOs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Keyword" ADD CONSTRAINT "Keyword_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "MetaSEO"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "keywords" ADD CONSTRAINT "keywords_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "meta_SEOs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Image" ADD CONSTRAINT "Image_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "images" ADD CONSTRAINT "images_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Image" ADD CONSTRAINT "Image_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "images" ADD CONSTRAINT "images_varient_id_fkey" FOREIGN KEY ("varient_id") REFERENCES "varients"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Attribute" ADD CONSTRAINT "Attribute_attribute_group_id_fkey" FOREIGN KEY ("attribute_group_id") REFERENCES "AttributeGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "attributes" ADD CONSTRAINT "attributes_attribute_group_id_fkey" FOREIGN KEY ("attribute_group_id") REFERENCES "attribute_groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AttributeOption" ADD CONSTRAINT "AttributeOption_attribute_id_fkey" FOREIGN KEY ("attribute_id") REFERENCES "Attribute"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "attribute_options" ADD CONSTRAINT "attribute_options_attribute_id_fkey" FOREIGN KEY ("attribute_id") REFERENCES "attributes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_attribute_group_id_fkey" FOREIGN KEY ("attribute_group_id") REFERENCES "AttributeGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "products" ADD CONSTRAINT "products_attribute_group_id_fkey" FOREIGN KEY ("attribute_group_id") REFERENCES "attribute_groups"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "products" ADD CONSTRAINT "products_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "MetaSEO"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "products" ADD CONSTRAINT "products_meta_SEO_id_fkey" FOREIGN KEY ("meta_SEO_id") REFERENCES "meta_SEOs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductAttribute" ADD CONSTRAINT "ProductAttribute_attribute_id_fkey" FOREIGN KEY ("attribute_id") REFERENCES "Attribute"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "varients" ADD CONSTRAINT "varients_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductAttribute" ADD CONSTRAINT "ProductAttribute_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "varient_options" ADD CONSTRAINT "varient_options_varient_id_fkey" FOREIGN KEY ("varient_id") REFERENCES "varients"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductAttributeValue" ADD CONSTRAINT "ProductAttributeValue_product_attribute_id_fkey" FOREIGN KEY ("product_attribute_id") REFERENCES "ProductAttribute"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "customer_addresses" ADD CONSTRAINT "customer_addresses_customer_Uid_fkey" FOREIGN KEY ("customer_Uid") REFERENCES "customers"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductAttributeValue" ADD CONSTRAINT "ProductAttributeValue_attribute_option_id_fkey" FOREIGN KEY ("attribute_option_id") REFERENCES "AttributeOption"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "addresses" ADD CONSTRAINT "addresses_customer_address_id_fkey" FOREIGN KEY ("customer_address_id") REFERENCES "customer_addresses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CustomerAddress" ADD CONSTRAINT "CustomerAddress_customer_Uid_fkey" FOREIGN KEY ("customer_Uid") REFERENCES "customers"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "target_coupon_products" ADD CONSTRAINT "target_coupon_products_coupon_id_fkey" FOREIGN KEY ("coupon_id") REFERENCES "coupons"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Address" ADD CONSTRAINT "Address_customer_address_id_fkey" FOREIGN KEY ("customer_address_id") REFERENCES "CustomerAddress"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "coupon_products" ADD CONSTRAINT "coupon_products_target_coupon_product_id_fkey" FOREIGN KEY ("target_coupon_product_id") REFERENCES "target_coupon_products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TargetCouponProduct" ADD CONSTRAINT "TargetCouponProduct_coupon_id_fkey" FOREIGN KEY ("coupon_id") REFERENCES "Coupon"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "CMSs" ADD CONSTRAINT "CMSs_metaSEOId_fkey" FOREIGN KEY ("metaSEOId") REFERENCES "meta_SEOs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CouponProduct" ADD CONSTRAINT "CouponProduct_target_coupon_product_id_fkey" FOREIGN KEY ("target_coupon_product_id") REFERENCES "TargetCouponProduct"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "product_IDs" ADD CONSTRAINT "product_IDs_collectionId_fkey" FOREIGN KEY ("collectionId") REFERENCES "collections"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CMS" ADD CONSTRAINT "CMS_metaSEOId_fkey" FOREIGN KEY ("metaSEOId") REFERENCES "MetaSEO"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "_CollectionToProduct" ADD CONSTRAINT "_CollectionToProduct_A_fkey" FOREIGN KEY ("A") REFERENCES "collections"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductID" ADD CONSTRAINT "ProductID_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ProductID" ADD CONSTRAINT "ProductID_collectionId_fkey" FOREIGN KEY ("collectionId") REFERENCES "Collection"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CollectionToProduct" ADD CONSTRAINT "_CollectionToProduct_A_fkey" FOREIGN KEY ("A") REFERENCES "Collection"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CollectionToProduct" ADD CONSTRAINT "_CollectionToProduct_B_fkey" FOREIGN KEY ("B") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CollectionToProduct" ADD CONSTRAINT "_CollectionToProduct_B_fkey" FOREIGN KEY ("B") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;

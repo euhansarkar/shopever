@@ -14,6 +14,7 @@ import { ProductRouter } from '../modules/product/product.router';
 import { ShippingMethodRouter } from '../modules/shippingMethod/shippingMethod.router';
 import { UserRouter } from '../modules/user/user.route';
 import { VarientRouter } from '../modules/varient/varient.router';
+import { StoreRouter } from '../modules/store/store.router';
 
 const router = express.Router();
 
@@ -81,6 +82,10 @@ const moduleRoutes = [
   {
     path: '/varients',
     route: VarientRouter,
+  },
+  {
+    path: '/store',
+    route: StoreRouter,
   }
 ];
 

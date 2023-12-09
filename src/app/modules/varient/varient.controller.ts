@@ -41,14 +41,14 @@ const getOne = catchAsync(async (req, res) => {
 })
 
 const updateOne = catchAsync(async (req, res) => {
-    // const { varient_options, ...VarientData } = req.body;
-    // const result = await VarientService.updateOne(VarientData, varient_options);
-    // sendResponse(res, {
-    //     statusCode: httpStatus.OK,
-    //     success: true,
-    //     message: `Varient updated`,
-    //     data: result
-    // })
+    
+    const result = await VarientService.updateOne(req);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `Varient updated`,
+        data: result
+    })
 })
 
 const deleteOne = catchAsync(async (req, res) => {

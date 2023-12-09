@@ -420,6 +420,20 @@ model ProductID {
   @@map("product_IDs")
 }
 
+model Store {
+  id          String   @id @default(uuid())
+  name        String   @default("evershop")
+  description String
+  logo        String
+  phoneNumber String   @default("01234-567890")
+  email       String   @default("evershop@gmail.com")
+  country     String   @default("bangladesh")
+  city        String   @default("rajshahi")
+  postalCode  String   @default("6000")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 enum AddressType {
   home
   office

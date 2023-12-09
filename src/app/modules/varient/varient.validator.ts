@@ -22,26 +22,19 @@ const create = z.object({
 
 //updation
 
-
-const metaSEOOptional = z.object({
-    parent_id: z.string().optional(),
-    meta_title: z.string().optional(),
-    meta_description: z.string().optional(),
-    url_key: z.string().optional()
-});
-
+const varientOptionOptional = z.object({
+    attribute_name: z.string().optional(),
+    option_id: z.string().optional(),
+})
 
 const update = z.object({
-    body: z.object({
-        name: z.string().optional(),
-        description: z.string().optional(),
-        sku: z.string().optional(),
-        tax_class: z.boolean().optional(),
-        attribute_group_id: z.string().optional(),
-        category_id: z.string().optional(),
-        meta_seo: metaSEOOptional.optional(),
-    }),
+    sku: z.string().optional(),
+    qty: z.number().optional(),
+    price: z.number().optional(),
+    weight: z.number().optional(),
+    status: z.boolean().optional(),
+    visibility: z.boolean().optional(),
+    varient_options: z.array(varientOptionOptional),
 });
-
 
 export const VarientValidator = { create, update }

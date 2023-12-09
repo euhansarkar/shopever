@@ -15,7 +15,7 @@ router.route(`/`)
         (req: Request, res: Response, next: NextFunction) => {
             req.body = VarientValidator.create.parse(JSON.parse
                 (req.body.data))
-                console.log(`this is from varient`,req.body);
+            console.log(`this is from varient`, req.body);
             return VarientController.createOne(req, res, next)
         }
     )
@@ -29,7 +29,14 @@ router.route(`/:id`)
         VarientController.getOne)
     .patch(
         auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-        validateRequest(VarientValidator.update), VarientController.updateOne)
+        FileUploadHeler.upload.array(`files`),
+        (req: Request, res: Response, next: NextFunction) => {
+            req.body = VarientValidator.update.parse(JSON.parse
+                (req.body.data))
+            return VarientController.updateOne(req, res, next)
+        }
+    )
+
     .delete(
         auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
         VarientController.deleteOne)
