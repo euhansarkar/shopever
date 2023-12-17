@@ -124,16 +124,13 @@ const updateOne = async (id: string, CouponData: Partial<Coupon>, keywords: Part
 
             const newKeywords = keywords.filter(keyword => keyword?.name && !keyword.isDeleted);
 
-            console.log()
 
             await asyncForEach(deleteKeywords, async (keyword: Keyword) => {
                 await transactionClient.keyword.deleteMany({ where: { meta_SEO_id: keyword.meta_SEO_id } })
-                console.log(`this will deleted`, keyword)
             })
 
             await asyncForEach(newKeywords, async (keyword: Keyword) => {
                 await transactionClient.keyword.create({ data: keyword })
-                console.log(`this will added`, keyword);
             })
         }
 
@@ -149,12 +146,10 @@ const updateOne = async (id: string, CouponData: Partial<Coupon>, keywords: Part
 
             await asyncForEach(deletedImages, async (image: Image) => {
                 await transactionClient.image.deleteMany({ where: { Coupon_id: image.Coupon_id } })
-                console.log(`this will deleted`, image)
             })
 
             await asyncForEach(newImages, async (image: Image) => {
                 await transactionClient.image.create({ data: { ...image, Coupon_id: getCoupon?.id } })
-                console.log(`this will added`, image);
             })
 
         }

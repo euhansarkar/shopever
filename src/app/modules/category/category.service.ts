@@ -158,12 +158,10 @@ const updateOne = async (id: string, categoryData: Partial<Category>, keywords: 
 
             await asyncForEach(deletedImages, async (image: Image) => {
                 await transactionClient.image.deleteMany({ where: { category_id: image.category_id } })
-                console.log(`this will deleted`, image)
             })
 
             await asyncForEach(newImages, async (image: Image) => {
                 await transactionClient.image.create({ data: { ...image, category_id: getCategory?.id } })
-                console.log(`this will added`, image);
             })
 
         }

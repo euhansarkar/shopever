@@ -14,6 +14,7 @@ const createOne = async (data: AttributeGroup): Promise<AttributeGroup | null> =
 const getAll = async (filters: IAttributeGroupFilterRequest, options: IPaginationOptions): Promise<IGenericResponse<AttributeGroup[]>> => {
     const { limit, page, skip } = paginationHelpers.calculatePagination(options);
     const { searchTerm, ...filterData } = filters;
+    console.log(`search term from group: ${searchTerm}`);
     const andConditions = [];
 
     if (searchTerm) {
@@ -65,7 +66,6 @@ const getOne = async (id: string): Promise<AttributeGroup | null> => {
     const result = await prisma.attributeGroup.findUnique({
         where: { id }, include: { attributes: { include: { attribute_options: true } } },
     })
-    console.log(result);
     return result;
 }
 

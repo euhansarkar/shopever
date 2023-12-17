@@ -3,7 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { ProductService } from "./product.service";
 import pick from "../../../shared/pick";
-import { ProductSearchableFields } from "./product.constant";
+import { ProductFilterableFields, ProductSearchableFields } from "./product.constant";
 
 const createProduct = catchAsync(async (req, res) => {
 
@@ -20,8 +20,10 @@ const createProduct = catchAsync(async (req, res) => {
 })
 
 const getAll = catchAsync(async (req, res) => {
-    const filters = pick(req.params, ProductSearchableFields);
-    const options = pick(req.params, [`page`, `limit`, `sortBy`, `sortOrder`]);
+
+    const filters = pick(req.query, ProductFilterableFields);
+    const options = pick(req.query, [`page`, `limit`, `sortBy`, `sortOrder`]);
+    
     const result = await ProductService.getAll(filters, options);
     sendResponse(res, {
         statusCode: httpStatus.OK,

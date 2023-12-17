@@ -103,7 +103,6 @@ const updateOne = async (id: string, attributeData: Partial<Attribute>, attribut
         if (attribute_options && attribute_options.length > 0) {
 
             const deleteOptions = attribute_options.filter(option => option.option_text && option.is_deleted);
-            console.log(`deleted options ###`, deleteOptions);
 
 
             const newOptions = attribute_options.filter(option => option.option_text && !option.is_deleted);
@@ -145,7 +144,7 @@ const updateOne = async (id: string, attributeData: Partial<Attribute>, attribut
                         data: { ...option, attribute_id: attResult.id }
                     })
                 } catch (error) {
-                    console.log(`error`, error)
+                    console.error(`error`, error)
                 }
             })
         }

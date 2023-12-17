@@ -1,3 +1,3 @@
 export type IAttributeGroupFilterRequest = {
-    searchTerm?: string;
+    searchTerm?: string | undefined;
 }

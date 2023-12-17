@@ -8,7 +8,6 @@ import { CMSSearchableFields } from "./CMS.constant";
 
 const createOne = async (CMSData: CMS, metaSEO: MetaSEO): Promise<CMS | null> => {
 
-    console.log(metaSEO);
     const result = await prisma.$transaction(async transectionClient => {
         const metaSEOCreation = await transectionClient.metaSEO.create({ data: metaSEO })
 

@@ -1,7 +1,6 @@
 export type IProductFilterRequest = {
     searchTerm?: string | undefined;
     name?: string | undefined;
-    shortDescription?: string | undefined;
     sku?: string | undefined;
     attribute_group_id?: string | undefined;
     category_id?: string | undefined;

@@ -6,7 +6,6 @@ import { UserService } from './user.service';
 
 const createCustomer = catchAsync(async (req, res) => {
   const { name, customer, ...userData } = req.body;
-  console.log(userData);
 
   const result = await UserService.createCustomer(name, customer, userData);
 

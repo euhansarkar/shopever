@@ -64,7 +64,6 @@ const getOne = async (id: string): Promise<Store | null> => {
     const result = await prisma.store.findUnique({
         where: { id }
     })
-    console.log(result);
     return result;
 }
 

@@ -3,7 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { VarientService } from "./varient.service";
 import pick from "../../../shared/pick";
-import { VarientSearchableFields } from "./varient.constant";
+import { VarientFilterableFields, VarientSearchableFields } from "./varient.constant";
 
 const createOne = catchAsync(async (req, res) => {
 
@@ -18,8 +18,8 @@ const createOne = catchAsync(async (req, res) => {
 })
 
 const getAll = catchAsync(async (req, res) => {
-    const filters = pick(req.params, VarientSearchableFields);
-    const options = pick(req.params, [`page`, `limit`, `sortBy`, `sortOrder`]);
+    const filters = pick(req.query, VarientFilterableFields);
+    const options = pick(req.query, [`page`, `limit`, `sortBy`, `sortOrder`]);
     const result = await VarientService.getAll(filters, options);
     sendResponse(res, {
         statusCode: httpStatus.OK,
