@@ -182,13 +182,14 @@ model Attribute {
 }
 
 model AttributeOption {
-  id           String     @id @default(uuid())
-  option_text  String
-  attribute    Attribute? @relation(fields: [attribute_id], references: [id])
-  attribute_id String
-  is_deleted   Boolean?   @default(false)
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
+  id              String          @id @default(uuid())
+  option_text     String
+  attribute       Attribute?      @relation(fields: [attribute_id], references: [id])
+  attribute_id    String
+  is_deleted      Boolean?        @default(false)
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  varient_options VarientOption[]
 
   @@map("attribute_options")
 }
@@ -234,10 +235,11 @@ model Varient {
 }
 
 model VarientOption {
-  id             String   @id @default(uuid())
+  id             String           @id @default(uuid())
   attribute_name String
-  option_id      String
-  Varient        Varient? @relation(fields: [varient_id], references: [id])
+  options        AttributeOption? @relation(fields: [option_id], references: [id])
+  option_id      String?
+  varients       Varient?         @relation(fields: [varient_id], references: [id])
   varient_id     String?
 
   @@map("varient_options")

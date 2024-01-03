@@ -87,7 +87,7 @@ const getAll = async (filters: IProductFilterRequest, options: IPaginationOption
 }
 
 const getOne = async (id: string): Promise<Product | null> => {
-    const result = await prisma.product.findUnique({ where: { id }, include: { attribute_group: true, category: true, meta_SEO: true, }, });
+    const result = await prisma.product.findUnique({ where: { id }, include: { attribute_group: true, category: true, meta_SEO: true, varients: { include: { varient_options: { include: { options: true } }, images: true } } } });
 
     return result;
 }
