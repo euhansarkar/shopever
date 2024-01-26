@@ -7,6 +7,9 @@ const create = z.object({
         }),
         method_code: z.string({
             required_error: `method code is required`
+        }),
+        cost: z.number({
+            required_error: `cost is required`
         })
     }),
 });
@@ -14,7 +17,8 @@ const create = z.object({
 const update = z.object({
     body: z.object({
         method_name: z.string().optional(),
-        method_code: z.string().optional()
+        method_code: z.string().optional(),
+        cost: z.number().optional(),
     }),
 });
 

@@ -5,10 +5,16 @@ import sendResponse from "../../../shared/sendResponse";
 import { OrderService } from "./order.service";
 import { OrderFilterableFields } from "./order.constant";
 
-
 const createOne = catchAsync(async (req, res) => {
-    const result = await OrderService.createOne(req.body);
-    sendResponse(res, { statusCode: httpStatus.OK, success: true, message: "attribute group created", data: result })
+    const { shipping_address, billing_address, ...orderData } = req.body;
+    const result = await OrderService.createOne(shipping_address, billing_address, orderData);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `Order created`,
+        data: result
+    })
 })
 
 const getAll = catchAsync(async (req, res) => {
@@ -18,7 +24,7 @@ const getAll = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: `all attribute groups found`,
+        message: `Orders found successfully`,
         meta: result.meta,
         data: result.data
     })
@@ -29,17 +35,7 @@ const getOne = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: `attribute group found`,
-        data: result
-    })
-})
-
-const updateOne = catchAsync(async (req, res) => {
-    const result = await OrderService.updateOne(req.params.id, req.body);
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: `attribute group updated`,
+        message: `Order found`,
         data: result
     })
 })
@@ -49,15 +45,21 @@ const deleteOne = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: `attribute group deleted`,
+        message: `Order deleted`,
         data: result
     })
 })
 
-export const OrderController = {
-    createOne,
-    getAll,
-    getOne,
-    updateOne,
-    deleteOne
-}
+const updateOne = catchAsync(async (req, res) => {
+    const { shipping_address, billing_address, ...orderData } = req.body;
+    const result = await OrderService.updateOne(req.params.id, shipping_address, billing_address, orderData);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `Order updated`,
+        data: result
+    })
+})
+
+export const OrderController = { createOne, getAll, getOne, deleteOne, updateOne }

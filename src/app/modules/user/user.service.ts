@@ -38,16 +38,19 @@ const createCustomer = async (
       data: nameData,
     });
 
+
     // push name id to admin table
     customerData.name_id = name.id;
 
+    console.log(`customer data`,customerData);
     const customerCreation = await transectionClient.customer.create({
       data: customerData
     });
 
+
     // if failed to create user
     if (!customerCreation) {
-      throw new ApiError(httpStatus.OK, `failed to create new admin`);
+      throw new ApiError(httpStatus.OK, `failed to create new customer`);
     }
 
     // admin id passs to the user table

@@ -3,7 +3,8 @@
     "src",
     "src/app/modules/academicFaculty/academicFaculty.constant.ts",
     "logs/permission",
-    "logs/userPermission"
+    "logs/userPermission",
+    "src/app/modules/order/order.validator.ts"
   ], // which files to compile
   "exclude": ["node_modules"], // which files to skip
   "compilerOptions": {

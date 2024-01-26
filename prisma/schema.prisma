@@ -38,19 +38,20 @@ model ManagementDepartment {
 }
 
 model Customer {
-  uid              String            @id @default(uuid())
-  id               String            @unique
+  uid              String   @id @default(uuid())
+  id               String   @unique
   name_id          String
-  name             Name              @relation(fields: [name_id], references: [id])
-  created_at       DateTime          @default(now())
+  name             Name?     @relation(fields: [name_id], references: [id])
   country          String?
   gender           String?
   date_of_birth    String?
   contact_no       String?
   profile_image    String?
-  updated_at       DateTime          @updatedAt
   users            User[]
-  customer_address CustomerAddress[]
+  customer_address Address?  @relation(fields: [address_Id], references: [id])
+  address_Id       String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
   @@map("customers")
 }
@@ -247,42 +248,93 @@ model VarientOption {
 
 // when user clicks on the addToCart button items will be added in the localStorage/cookie
 
-model CustomerAddress {
-  id           String      @id @default(uuid())
-  type         AddressType
-  addresses    Address[]
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @updatedAt
-  Customer     Customer?   @relation(fields: [customer_Uid], references: [uid])
-  customer_Uid String
+// model CustomerAddress {
+//   id           String      @id @default(uuid())
+//   type         AddressType
+//   addresses    Address     
+//   created_at   DateTime    @default(now())
+//   updated_at   DateTime    @updatedAt
+//   Customer     Customer?   @relation(fields: [customer_Uid], references: [uid])
+//   customer_Uid String 
 
-  @@map("customer_addresses")
-}
+//   @@map("customer_addresses")
+// }
 
 model Address {
-  id                  String           @id @default(uuid())
+  id                  String     @id @default(uuid())
   full_name           String
   telephone           String
-  address_1           String
-  address_2           String
+  location_1          String
+  location_2          String
   city                String
   province            String
   country             String
   postcode            String
-  customer_address    CustomerAddress? @relation(fields: [customer_address_id], references: [id])
   customer_address_id String?
-  created_at          DateTime         @default(now())
-  updated_at          DateTime         @updatedAt
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  Customer            Customer[]
 
   @@map("addresses")
+}
+
+model Order {
+  id                String          @id @default(uuid())
+  order_number      Int             @unique @default(autoincrement())
+  shipping_address  ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  billing_address   BillingAddress  @relation(fields: [billingAddressId], references: [id])
+  payment_method    PaymentMethod   @relation(fields: [paymentMethodId], references: [id])
+  shipping_method   ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
+  shippingAddressId String
+  billingAddressId  String
+  paymentMethodId   String
+  shippingMethodId  String
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+
+  @@map("orders")
+}
+
+model ShippingAddress {
+  id             String   @id @default(uuid())
+  name           String
+  phone_number_1 String
+  phone_number_2 String
+  country        String
+  state          String
+  city           String
+  location       String
+  orders         Order[]
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map("shipping_addresses")
+}
+
+model BillingAddress {
+  id             String   @id @default(uuid())
+  name           String
+  phone_number_1 String
+  phone_number_2 String
+  country        String
+  state          String
+  city           String
+  location       String
+  orders         Order[]
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map("billing_addresses")
 }
 
 model ShippingMethod {
   id          String   @id @default(uuid())
   method_name String
   method_code String
+  cost        Int
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  orders      Order[]
 
   @@map("shipping_methods")
 }
@@ -293,6 +345,7 @@ model PaymentMethod {
   method_code String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  orders      Order[]
 
   @@map("payment_methods")
 }
@@ -376,15 +429,6 @@ model UserCouponCondition {
   updated_at DateTime @updatedAt
 
   @@map("user_coupon_conditions")
-}
-
-model Order {
-  id           String   @id @default(uuid())
-  order_number Int
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-
-  @@map("orders")
 }
 
 model CMS {

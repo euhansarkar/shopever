@@ -16,6 +16,7 @@ import { UserRouter } from '../modules/user/user.route';
 import { VarientRouter } from '../modules/varient/varient.router';
 import { StoreRouter } from '../modules/store/store.router';
 import { PaymentRouter } from '../modules/payment/payment.router';
+import { OrderRouter } from '../modules/order/order.router';
 
 const router = express.Router();
 
@@ -91,6 +92,10 @@ const moduleRoutes = [
   {
     path: '/payment',
     route: PaymentRouter,
+  },
+  {
+    path: '/orders',
+    route: OrderRouter,
   }
 ];
 

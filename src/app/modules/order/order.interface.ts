@@ -1,3 +1,3 @@
 export type IOrderFilterRequest = {
-    searchTerm?: string;
+    searchTerm?: string
 }
