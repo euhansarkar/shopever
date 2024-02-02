@@ -1,10 +1,11 @@
-import { BillingAddress, Order, OrderedProduct, Prisma, ShippingAddress, } from "@prisma/client";
+import { BillingAddress, Order, OrderedProduct, Prisma, ShippingAddress, VarientProduct, } from "@prisma/client";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import prisma from "../../../shared/prisma";
 import { IOrderFilterRequest } from "./order.interface";
 import { OrderSearchableFields } from "./order.constant";
+import { asyncForEach } from "../../../shared/utils";
 
 const createOne = async (shipping_address: ShippingAddress
     , billing_address: BillingAddress, products: any, orderData: Order
@@ -23,29 +24,30 @@ const createOne = async (shipping_address: ShippingAddress
             data: { ...orderData, shippingAddressId: shippingAddrCreation?.id, billingAddressId: billingAddrCreation?.id, }, include: { shipping_address: true, billing_address: true, shipping_method: true, payment_method: true }
         })
 
-        for (const product of products) {
 
-            const data = { product_id: product?.product_id, order_id: orderCreation?.id }
 
-            // product creation
-            const createOrderedProduct = await transectionClient.orderedProduct.create({ data });
+        await asyncForEach(products, async (product: any) => {
+            try {
+                const data = { product_id: product?.product_id, order_id: orderCreation?.id };
 
-            // varients
-            const varients = product?.varients;
+                // product creation
+                const createOrderedProduct = await transectionClient.orderedProduct.create({ data });
 
-            // const create ordered varients
-            for (const varient of varients) {
-                const createVarient = await transectionClient.varientProduct.create({ data: { ...varient, ordered_product_id: createOrderedProduct?.id } });
-                console.log(`varient`, createVarient);
+
+                // variants
+                const variants = product?.varients?.map((varient: VarientProduct) => ({ ...varient, ordered_product_id: createOrderedProduct?.id }))
+
+                const createVarientProduct = await transectionClient.varientProduct.createMany({ data: variants });
+
+            } catch (error) {
+                console.error(error);
             }
-
-
-        }
+        })
 
         return orderCreation
     })
 
-    const result = await prisma.order.findUnique({ where: { id: orderCreation.id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
+    const result = await prisma.order.findUnique({ where: { id: orderCreation.id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: true } } } });
 
     return result;
 
@@ -107,7 +109,7 @@ const getAll = async (filters: IOrderFilterRequest, options: IPaginationOptions)
 }
 
 const getOne = async (id: string): Promise<Order | null> => {
-    const result = await prisma.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
+    const result = await prisma.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: true } } } });
     return result
 }
 
