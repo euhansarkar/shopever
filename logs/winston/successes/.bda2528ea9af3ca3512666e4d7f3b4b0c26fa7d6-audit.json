@@ -6,11 +6,6 @@
     "auditLog": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\.bda2528ea9af3ca3512666e4d7f3b4b0c26fa7d6-audit.json",
     "files": [
         {
-            "date": 1705162738535,
-            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2024-13-01-22-success.log",
-            "hash": "1f32fb121d9705a07ee6fd728611381477a8c83d6ad232c31f563b2de06dea13"
-        },
-        {
             "date": 1705338482916,
             "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2024-15-01-23-success.log",
             "hash": "0fce4c702d105814edfeafcd3b0b48c47ea68b4b28bfae009693ab4ac7ae7995"
@@ -59,6 +54,16 @@
             "date": 1706298092078,
             "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2024-27-01-01-success.log",
             "hash": "dfc0b684f29e9e162025dc086f48b878f7877ddd11b194528b0dfae9504d6f02"
+        },
+        {
+            "date": 1706372543800,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2024-27-01-22-success.log",
+            "hash": "61c82bf4c4f93cd96ab52adb4f9687cdf7ac2208733f5e8f5f1ac548e2bc6a8d"
+        },
+        {
+            "date": 1706468351346,
+            "name": "C:\\Users\\Rizwan\\Desktop\\projects\\server\\logs\\winston\\successes\\phu-2024-29-01-00-success.log",
+            "hash": "56f73d9ecbbb399c0e203dfc75c6d5233e7b1c84dcedce74a0967a0bb28632ff"
         }
     ],
     "hashType": "sha256"

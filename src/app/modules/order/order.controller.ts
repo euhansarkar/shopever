@@ -6,8 +6,8 @@ import { OrderService } from "./order.service";
 import { OrderFilterableFields } from "./order.constant";
 
 const createOne = catchAsync(async (req, res) => {
-    const { shipping_address, billing_address, ...orderData } = req.body;
-    const result = await OrderService.createOne(shipping_address, billing_address, orderData);
+    const { shipping_address, billing_address, products, ...orderData } = req.body;
+    const result = await OrderService.createOne(shipping_address, billing_address, products, orderData);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -51,8 +51,8 @@ const deleteOne = catchAsync(async (req, res) => {
 })
 
 const updateOne = catchAsync(async (req, res) => {
-    const { shipping_address, billing_address, ...orderData } = req.body;
-    const result = await OrderService.updateOne(req.params.id, shipping_address, billing_address, orderData);
+    const { shipping_address, billing_address, products, ...orderData } = req.body;
+    const result = await OrderService.updateOne(req.params.id, shipping_address, billing_address, products, orderData);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

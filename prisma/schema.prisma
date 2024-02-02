@@ -41,14 +41,14 @@ model Customer {
   uid              String   @id @default(uuid())
   id               String   @unique
   name_id          String
-  name             Name?     @relation(fields: [name_id], references: [id])
+  name             Name?    @relation(fields: [name_id], references: [id])
   country          String?
   gender           String?
   date_of_birth    String?
   contact_no       String?
   profile_image    String?
   users            User[]
-  customer_address Address?  @relation(fields: [address_Id], references: [id])
+  customer_address Address? @relation(fields: [address_Id], references: [id])
   address_Id       String?
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
@@ -279,18 +279,19 @@ model Address {
 }
 
 model Order {
-  id                String          @id @default(uuid())
-  order_number      Int             @unique @default(autoincrement())
-  shipping_address  ShippingAddress @relation(fields: [shippingAddressId], references: [id])
-  billing_address   BillingAddress  @relation(fields: [billingAddressId], references: [id])
-  payment_method    PaymentMethod   @relation(fields: [paymentMethodId], references: [id])
-  shipping_method   ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
+  id                String           @id @default(uuid())
+  order_number      Int              @unique @default(autoincrement())
+  shipping_address  ShippingAddress  @relation(fields: [shippingAddressId], references: [id])
+  billing_address   BillingAddress   @relation(fields: [billingAddressId], references: [id])
+  payment_method    PaymentMethod    @relation(fields: [paymentMethodId], references: [id])
+  shipping_method   ShippingMethod   @relation(fields: [shippingMethodId], references: [id])
+  products          OrderedProduct[]
   shippingAddressId String
   billingAddressId  String
   paymentMethodId   String
   shippingMethodId  String
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
 
   @@map("orders")
 }
@@ -325,6 +326,32 @@ model BillingAddress {
   updated_at     DateTime @updatedAt
 
   @@map("billing_addresses")
+}
+
+model VarientProduct {
+  id                 String          @id @default(uuid())
+  attribute_id       String
+  attribute_name     String
+  option_id          String
+  varient_id         String
+  orderedProduct     OrderedProduct? @relation(fields: [ordered_product_id], references: [id])
+  ordered_product_id String?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+
+  @@map("varient_products")
+}
+
+model OrderedProduct {
+  id         String           @id @default(uuid())
+  product_id String
+  varients   VarientProduct[]
+  orders     Order?           @relation(fields: [order_id], references: [id])
+  order_id   String?
+  created_at DateTime         @default(now())
+  updated_at DateTime         @updatedAt
+
+  @@map("ordered_products")
 }
 
 model ShippingMethod {

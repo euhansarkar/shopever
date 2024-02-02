@@ -1,4 +1,4 @@
-import { BillingAddress, Order, Prisma, ShippingAddress } from "@prisma/client";
+import { BillingAddress, Order, OrderedProduct, Prisma, ShippingAddress, } from "@prisma/client";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
@@ -7,7 +7,7 @@ import { IOrderFilterRequest } from "./order.interface";
 import { OrderSearchableFields } from "./order.constant";
 
 const createOne = async (shipping_address: ShippingAddress
-    , billing_address: BillingAddress, orderData: Order
+    , billing_address: BillingAddress, products: any, orderData: Order
 ): Promise<Order | null> => {
 
     const orderCreation = await prisma.$transaction(async (transectionClient) => {
@@ -23,10 +23,29 @@ const createOne = async (shipping_address: ShippingAddress
             data: { ...orderData, shippingAddressId: shippingAddrCreation?.id, billingAddressId: billingAddrCreation?.id, }, include: { shipping_address: true, billing_address: true, shipping_method: true, payment_method: true }
         })
 
+        for (const product of products) {
+
+            const data = { product_id: product?.product_id, order_id: orderCreation?.id }
+
+            // product creation
+            const createOrderedProduct = await transectionClient.orderedProduct.create({ data });
+
+            // varients
+            const varients = product?.varients;
+
+            // const create ordered varients
+            for (const varient of varients) {
+                const createVarient = await transectionClient.varientProduct.create({ data: { ...varient, ordered_product_id: createOrderedProduct?.id } });
+                console.log(`varient`, createVarient);
+            }
+
+
+        }
+
         return orderCreation
     })
 
-    const result = await prisma.order.findUnique({ where: { id: orderCreation.id } });
+    const result = await prisma.order.findUnique({ where: { id: orderCreation.id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
 
     return result;
 
@@ -88,31 +107,50 @@ const getAll = async (filters: IOrderFilterRequest, options: IPaginationOptions)
 }
 
 const getOne = async (id: string): Promise<Order | null> => {
-    const result = await prisma.order.findUnique({
-        where: {
-            id
-        }
-    })
+    const result = await prisma.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
     return result
 }
 
 
 const updateOne = async (id: string, shipping_address: Partial<ShippingAddress>
-    , billing_address: Partial<BillingAddress>, orderData: Partial<Order>): Promise<Order | null> => {
+    , billing_address: Partial<BillingAddress>, products: any, orderData: Partial<Order>): Promise<Order | null> => {
+
+    const getOrder = await prisma.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
 
     const orderUpdation = await prisma.$transaction(async (transectionClient) => {
-        // shipping address updation
-        const shippingAddrCreation = await transectionClient.shippingAddress.update({ where: { id: shipping_address?.id }, data: shipping_address });
 
-        // billing address updation
-        const billingAddrCreation = await transectionClient.billingAddress.update({ where: { id: billing_address?.id }, data: billing_address });
+        // shipping address creation
+        const shippingAddrUpdation = await transectionClient.shippingAddress.update({ where: { id: getOrder?.shipping_address?.id }, data: shipping_address });
 
-        // order updation
-        const orderCreation = await transectionClient.order.update({
-            where: { id: orderData?.id }, data: { ...orderData }
+        // billing address creation
+        const billingAddrUpdation = await transectionClient.billingAddress.update({ where: { id: getOrder?.billing_address?.id }, data: billing_address });
+
+        // order creation
+        const orderUpdation = await transectionClient.order.update({
+            where: { id: getOrder?.id },
+            data: { ...orderData, shippingAddressId: shippingAddrUpdation?.id, billingAddressId: billingAddrUpdation?.id, }, include: { shipping_address: true, billing_address: true, shipping_method: true, payment_method: true }
         })
 
-        return orderCreation
+        for (const product of products) {
+
+            const data = { product_id: product?.product_id, order_id: orderUpdation?.id }
+
+            // product creation
+            const createOrderedProduct = await transectionClient.orderedProduct.create({ data });
+
+            // varients
+            const varients = product?.varients;
+
+            // const create ordered varients
+            for (const varient of varients) {
+                const createVarient = await transectionClient.varientProduct.create({ data: { ...varient, ordered_product_id: createOrderedProduct?.id } });
+                console.log(`varient`, createVarient);
+            }
+
+
+        }
+
+        return orderUpdation
     })
 
     const get = await prisma.order.findUnique({ where: { id } });
@@ -124,7 +162,7 @@ const deleteOne = async (id: string): Promise<Order | null> => {
 
     const result = await prisma.$transaction(async (transectionClient) => {
 
-        const result = await transectionClient.order.delete({ where: { id }, include: { shipping_address: true, billing_address: true } });
+        const result = await transectionClient.order.delete({ where: { id }, include: { shipping_address: true, billing_address: true, payment_method: true, shipping_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
 
         return result;
 

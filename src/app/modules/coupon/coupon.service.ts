@@ -22,7 +22,9 @@ const createOne = async (CouponData: Coupon, keywords: Keyword[], images: Image[
 
         //@ts-ignore
         const data = { meta_SEO_id: metaSEOCreation.id, ...CouponData };
-        const CouponCreation = await transactionClient.coupon.create({ data, include: { Meta_SEO: true, images: true } });
+        const CouponCreation = await transactionClient.coupon.create({ data, 
+            // include: { Meta_SEO: true, images: true } 
+        });
 
         for (const img of images) {
             //@ts-ignore
@@ -33,7 +35,9 @@ const createOne = async (CouponData: Coupon, keywords: Keyword[], images: Image[
         return CouponCreation;
     });
 
-    const get = await prisma.coupon.findUnique({ where: { id: result.id }, include: { images: true, Meta_SEO: true } })
+    const get = await prisma.coupon.findUnique({ where: { id: result.id }, 
+        // include: { images: true, Meta_SEO: true } 
+    })
     return result;
 }
 
@@ -77,10 +81,7 @@ const getAll = async (filters: ICouponFilterRequest, options: IPaginationOptions
     const whereConditions: Prisma.CouponWhereInput = andConditions.length > 0 ? { AND: andConditions } : {}
 
     const result = await prisma.coupon.findMany({
-        include: {
-            Meta_SEO: true,
-            images: true
-        },
+        // include: {Meta_SEO: true,images: true},
         where: whereConditions,
         skip,
         take: limit,
@@ -104,7 +105,8 @@ const getAll = async (filters: ICouponFilterRequest, options: IPaginationOptions
 }
 
 const getOne = async (id: string): Promise<Coupon | null> => {
-    const result = await prisma.coupon.findUnique({ where: { id }, include: { images: true, Meta_SEO: true } });
+    const result = await prisma.coupon.findUnique({ where: { id },  // include: { images: true, Meta_SEO: true } 
+    });
     return result;
 }
 
@@ -115,7 +117,7 @@ const updateOne = async (id: string, CouponData: Partial<Coupon>, keywords: Part
         const getCoupon = await transactionClient.coupon.findUnique({ where: { id } });
 
         // meta SEO creation 
-        const metaSEOCreation = await transactionClient.metaSEO.update({ where: { id: getCoupon?.meta_SEO_id! }, data: metaSEO });
+        // const metaSEOCreation = await transactionClient.metaSEO.update({ where: { id: getCoupon?.meta_SEO_id! }, data: metaSEO });
 
 
         if (keywords && keywords.length > 0) {
@@ -145,11 +147,13 @@ const updateOne = async (id: string, CouponData: Partial<Coupon>, keywords: Part
             const newImages = images.filter(image => image?.image_url && !image.isDeleted);
 
             await asyncForEach(deletedImages, async (image: Image) => {
-                await transactionClient.image.deleteMany({ where: { Coupon_id: image.Coupon_id } })
+                // await transactionClient.image.deleteMany({ where: { Coupon_id: image.Coupon_id } })
             })
 
             await asyncForEach(newImages, async (image: Image) => {
-                await transactionClient.image.create({ data: { ...image, Coupon_id: getCoupon?.id } })
+                await transactionClient.image.create({ data: { ...image, 
+                    // Coupon_id: getCoupon?.id 
+                } })
             })
 
         }
@@ -157,7 +161,8 @@ const updateOne = async (id: string, CouponData: Partial<Coupon>, keywords: Part
         return CouponCreation;
     });
 
-    const get = await prisma.coupon.findUnique({ where: { id }, include: { images: true, Meta_SEO: true } })
+    const get = await prisma.coupon.findUnique({ where: { id },     /// include: { images: true, Meta_SEO: true } 
+    })
 
     return get;
 
@@ -174,7 +179,7 @@ const deleteOne = async (id: string): Promise<Coupon | null> => {
         const metaSEODeletion = await transactionClient.metaSEO.delete({ where: { id: getCoupon?.meta_SEO_id } });
 
         // image deletion
-        const imageDeletion = await transactionClient.image.deleteMany({ where: { Coupon_id: getCoupon?.id } });
+        // const imageDeletion = await transactionClient.image.deleteMany({ where: { Coupon_id: getCoupon?.id } });
 
         // keyword deletion
         const keywordDeletion = await transactionClient.keyword.deleteMany({ where: { meta_SEO_id: metaSEODeletion.id } });
