@@ -31,8 +31,8 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const order_service_1 = require("./order.service");
 const order_constant_1 = require("./order.constant");
 const createOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const _a = req.body, { shipping_address, billing_address } = _a, orderData = __rest(_a, ["shipping_address", "billing_address"]);
-    const result = yield order_service_1.OrderService.createOne(shipping_address, billing_address, orderData);
+    const _a = req.body, { shipping_address, billing_address, products } = _a, orderData = __rest(_a, ["shipping_address", "billing_address", "products"]);
+    const result = yield order_service_1.OrderService.createOne(shipping_address, billing_address, products, orderData);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -71,8 +71,8 @@ const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     });
 }));
 const updateOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const _b = req.body, { shipping_address, billing_address } = _b, orderData = __rest(_b, ["shipping_address", "billing_address"]);
-    const result = yield order_service_1.OrderService.updateOne(req.params.id, shipping_address, billing_address, orderData);
+    const _b = req.body, { shipping_address, billing_address, products } = _b, orderData = __rest(_b, ["shipping_address", "billing_address", "products"]);
+    const result = yield order_service_1.OrderService.updateOne(req.params.id, shipping_address, billing_address, products, orderData);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

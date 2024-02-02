@@ -27,7 +27,7 @@ exports.OrderService = void 0;
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const order_constant_1 = require("./order.constant");
-const createOne = (shipping_address, billing_address, orderData) => __awaiter(void 0, void 0, void 0, function* () {
+const createOne = (shipping_address, billing_address, products, orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const orderCreation = yield prisma_1.default.$transaction((transectionClient) => __awaiter(void 0, void 0, void 0, function* () {
         // shipping address creation
         const shippingAddrCreation = yield transectionClient.shippingAddress.create({ data: shipping_address });
@@ -37,9 +37,21 @@ const createOne = (shipping_address, billing_address, orderData) => __awaiter(vo
         const orderCreation = yield transectionClient.order.create({
             data: Object.assign(Object.assign({}, orderData), { shippingAddressId: shippingAddrCreation === null || shippingAddrCreation === void 0 ? void 0 : shippingAddrCreation.id, billingAddressId: billingAddrCreation === null || billingAddrCreation === void 0 ? void 0 : billingAddrCreation.id }), include: { shipping_address: true, billing_address: true, shipping_method: true, payment_method: true }
         });
+        for (const product of products) {
+            const data = { product_id: product === null || product === void 0 ? void 0 : product.product_id, order_id: orderCreation === null || orderCreation === void 0 ? void 0 : orderCreation.id };
+            // product creation
+            const createOrderedProduct = yield transectionClient.orderedProduct.create({ data });
+            // varients
+            const varients = product === null || product === void 0 ? void 0 : product.varients;
+            // const create ordered varients
+            for (const varient of varients) {
+                const createVarient = yield transectionClient.varientProduct.create({ data: Object.assign(Object.assign({}, varient), { ordered_product_id: createOrderedProduct === null || createOrderedProduct === void 0 ? void 0 : createOrderedProduct.id }) });
+                console.log(`varient`, createVarient);
+            }
+        }
         return orderCreation;
     }));
-    const result = yield prisma_1.default.order.findUnique({ where: { id: orderCreation.id } });
+    const result = yield prisma_1.default.order.findUnique({ where: { id: orderCreation.id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
     return result;
 });
 const getAll = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
@@ -89,31 +101,42 @@ const getAll = (filters, options) => __awaiter(void 0, void 0, void 0, function*
     };
 });
 const getOne = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.order.findUnique({
-        where: {
-            id
-        }
-    });
+    const result = yield prisma_1.default.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
     return result;
 });
-const updateOne = (id, shipping_address, billing_address, orderData) => __awaiter(void 0, void 0, void 0, function* () {
+const updateOne = (id, shipping_address, billing_address, products, orderData) => __awaiter(void 0, void 0, void 0, function* () {
+    const getOrder = yield prisma_1.default.order.findUnique({ where: { id }, include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
     const orderUpdation = yield prisma_1.default.$transaction((transectionClient) => __awaiter(void 0, void 0, void 0, function* () {
-        // shipping address updation
-        const shippingAddrCreation = yield transectionClient.shippingAddress.update({ where: { id: shipping_address === null || shipping_address === void 0 ? void 0 : shipping_address.id }, data: shipping_address });
-        // billing address updation
-        const billingAddrCreation = yield transectionClient.billingAddress.update({ where: { id: billing_address === null || billing_address === void 0 ? void 0 : billing_address.id }, data: billing_address });
-        // order updation
-        const orderCreation = yield transectionClient.order.update({
-            where: { id: orderData === null || orderData === void 0 ? void 0 : orderData.id }, data: Object.assign({}, orderData)
+        var _a, _b;
+        // shipping address creation
+        const shippingAddrUpdation = yield transectionClient.shippingAddress.update({ where: { id: (_a = getOrder === null || getOrder === void 0 ? void 0 : getOrder.shipping_address) === null || _a === void 0 ? void 0 : _a.id }, data: shipping_address });
+        // billing address creation
+        const billingAddrUpdation = yield transectionClient.billingAddress.update({ where: { id: (_b = getOrder === null || getOrder === void 0 ? void 0 : getOrder.billing_address) === null || _b === void 0 ? void 0 : _b.id }, data: billing_address });
+        // order creation
+        const orderUpdation = yield transectionClient.order.update({
+            where: { id: getOrder === null || getOrder === void 0 ? void 0 : getOrder.id },
+            data: Object.assign(Object.assign({}, orderData), { shippingAddressId: shippingAddrUpdation === null || shippingAddrUpdation === void 0 ? void 0 : shippingAddrUpdation.id, billingAddressId: billingAddrUpdation === null || billingAddrUpdation === void 0 ? void 0 : billingAddrUpdation.id }), include: { shipping_address: true, billing_address: true, shipping_method: true, payment_method: true }
         });
-        return orderCreation;
+        for (const product of products) {
+            const data = { product_id: product === null || product === void 0 ? void 0 : product.product_id, order_id: orderUpdation === null || orderUpdation === void 0 ? void 0 : orderUpdation.id };
+            // product creation
+            const createOrderedProduct = yield transectionClient.orderedProduct.create({ data });
+            // varients
+            const varients = product === null || product === void 0 ? void 0 : product.varients;
+            // const create ordered varients
+            for (const varient of varients) {
+                const createVarient = yield transectionClient.varientProduct.create({ data: Object.assign(Object.assign({}, varient), { ordered_product_id: createOrderedProduct === null || createOrderedProduct === void 0 ? void 0 : createOrderedProduct.id }) });
+                console.log(`varient`, createVarient);
+            }
+        }
+        return orderUpdation;
     }));
     const get = yield prisma_1.default.order.findUnique({ where: { id } });
     return get;
 });
 const deleteOne = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.$transaction((transectionClient) => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield transectionClient.order.delete({ where: { id }, include: { shipping_address: true, billing_address: true } });
+        const result = yield transectionClient.order.delete({ where: { id }, include: { shipping_address: true, billing_address: true, payment_method: true, shipping_method: true, products: { include: { varients: { include: { orderedProduct: true } } } } } });
         return result;
     }));
     return result;
