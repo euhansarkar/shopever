@@ -37,12 +37,13 @@ CREATE TABLE "customers" (
     "uid" TEXT NOT NULL,
     "id" TEXT NOT NULL,
     "name_id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "country" TEXT,
     "gender" TEXT,
     "date_of_birth" TEXT,
     "contact_no" TEXT,
     "profile_image" TEXT,
+    "address_Id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "customers_pkey" PRIMARY KEY ("uid")
@@ -220,23 +221,12 @@ CREATE TABLE "varient_options" (
 );
 
 -- CreateTable
-CREATE TABLE "customer_addresses" (
-    "id" TEXT NOT NULL,
-    "type" "AddressType" NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "customer_Uid" TEXT NOT NULL,
-
-    CONSTRAINT "customer_addresses_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "addresses" (
     "id" TEXT NOT NULL,
     "full_name" TEXT NOT NULL,
     "telephone" TEXT NOT NULL,
-    "address_1" TEXT NOT NULL,
-    "address_2" TEXT NOT NULL,
+    "location_1" TEXT NOT NULL,
+    "location_2" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "province" TEXT NOT NULL,
     "country" TEXT NOT NULL,
@@ -249,10 +239,82 @@ CREATE TABLE "addresses" (
 );
 
 -- CreateTable
+CREATE TABLE "orders" (
+    "id" TEXT NOT NULL,
+    "order_number" SERIAL NOT NULL,
+    "shippingAddressId" TEXT NOT NULL,
+    "billingAddressId" TEXT NOT NULL,
+    "paymentMethodId" TEXT NOT NULL,
+    "shippingMethodId" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "shipping_addresses" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "phone_number_1" TEXT NOT NULL,
+    "phone_number_2" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "state" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "shipping_addresses_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "billing_addresses" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "phone_number_1" TEXT NOT NULL,
+    "phone_number_2" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "state" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "billing_addresses_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "varient_products" (
+    "id" TEXT NOT NULL,
+    "attribute_id" TEXT NOT NULL,
+    "attribute_name" TEXT NOT NULL,
+    "option_id" TEXT NOT NULL,
+    "varient_id" TEXT NOT NULL,
+    "ordered_product_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "varient_products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ordered_products" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "order_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ordered_products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "shipping_methods" (
     "id" TEXT NOT NULL,
     "method_name" TEXT NOT NULL,
     "method_code" TEXT NOT NULL,
+    "cost" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -353,16 +415,6 @@ CREATE TABLE "user_coupon_conditions" (
 );
 
 -- CreateTable
-CREATE TABLE "orders" (
-    "id" TEXT NOT NULL,
-    "order_number" INTEGER NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "CMSs" (
     "id" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL,
@@ -452,6 +504,9 @@ CREATE UNIQUE INDEX "products_sku_key" ON "products"("sku");
 CREATE UNIQUE INDEX "varients_sku_key" ON "varients"("sku");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "orders_order_number_key" ON "orders"("order_number");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_CollectionToProduct_AB_unique" ON "_CollectionToProduct"("A", "B");
 
 -- CreateIndex
@@ -468,6 +523,9 @@ ALTER TABLE "users" ADD CONSTRAINT "users_user_coupon_condition_id_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "customers" ADD CONSTRAINT "customers_name_id_fkey" FOREIGN KEY ("name_id") REFERENCES "names"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "customers" ADD CONSTRAINT "customers_address_Id_fkey" FOREIGN KEY ("address_Id") REFERENCES "addresses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "admins" ADD CONSTRAINT "admins_name_id_fkey" FOREIGN KEY ("name_id") REFERENCES "names"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -512,10 +570,28 @@ ALTER TABLE "varient_options" ADD CONSTRAINT "varient_options_option_id_fkey" FO
 ALTER TABLE "varient_options" ADD CONSTRAINT "varient_options_varient_id_fkey" FOREIGN KEY ("varient_id") REFERENCES "varients"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "customer_addresses" ADD CONSTRAINT "customer_addresses_customer_Uid_fkey" FOREIGN KEY ("customer_Uid") REFERENCES "customers"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "orders" ADD CONSTRAINT "orders_shippingAddressId_fkey" FOREIGN KEY ("shippingAddressId") REFERENCES "shipping_addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "addresses" ADD CONSTRAINT "addresses_customer_address_id_fkey" FOREIGN KEY ("customer_address_id") REFERENCES "customer_addresses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "orders" ADD CONSTRAINT "orders_billingAddressId_fkey" FOREIGN KEY ("billingAddressId") REFERENCES "billing_addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_paymentMethodId_fkey" FOREIGN KEY ("paymentMethodId") REFERENCES "payment_methods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_shippingMethodId_fkey" FOREIGN KEY ("shippingMethodId") REFERENCES "shipping_methods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "varient_products" ADD CONSTRAINT "varient_products_option_id_fkey" FOREIGN KEY ("option_id") REFERENCES "attribute_options"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "varient_products" ADD CONSTRAINT "varient_products_ordered_product_id_fkey" FOREIGN KEY ("ordered_product_id") REFERENCES "ordered_products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ordered_products" ADD CONSTRAINT "ordered_products_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ordered_products" ADD CONSTRAINT "ordered_products_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "target_coupon_products" ADD CONSTRAINT "target_coupon_products_coupon_id_fkey" FOREIGN KEY ("coupon_id") REFERENCES "coupons"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -85,6 +85,7 @@ const getAll = (filters, options) => __awaiter(void 0, void 0, void 0, function*
         where: whereConditions,
         skip,
         take: limit,
+        include: { shipping_address: true, shipping_method: true, billing_address: true, payment_method: true, products: { include: { varients: true } } },
         orderBy: options.sortBy && options.sortOrder
             ? { [options.sortBy]: options.sortOrder }
             : {

@@ -183,36 +183,38 @@ model Attribute {
 }
 
 model AttributeOption {
-  id              String          @id @default(uuid())
+  id              String           @id @default(uuid())
   option_text     String
-  attribute       Attribute?      @relation(fields: [attribute_id], references: [id])
+  attribute       Attribute?       @relation(fields: [attribute_id], references: [id])
   attribute_id    String
-  is_deleted      Boolean?        @default(false)
-  created_at      DateTime        @default(now())
-  updated_at      DateTime        @updatedAt
+  is_deleted      Boolean?         @default(false)
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
   varient_options VarientOption[]
+  VarientProduct  VarientProduct[]
 
   @@map("attribute_options")
 }
 
 model Product {
-  id                 String          @id @default(uuid())
+  id                 String           @id @default(uuid())
   name               String
   description        String
-  sku                String          @unique
-  manage_stock       Boolean         @default(false)
-  stock_availability Boolean         @default(false)
-  tax_class          Boolean         @default(false)
-  attribute_group    AttributeGroup? @relation(fields: [attribute_group_id], references: [id])
+  sku                String           @unique
+  manage_stock       Boolean          @default(false)
+  stock_availability Boolean          @default(false)
+  tax_class          Boolean          @default(false)
+  attribute_group    AttributeGroup?  @relation(fields: [attribute_group_id], references: [id])
   attribute_group_id String?
-  category           Category?       @relation(fields: [category_id], references: [id])
+  category           Category?        @relation(fields: [category_id], references: [id])
   category_id        String?
-  meta_SEO           MetaSEO         @relation(fields: [meta_SEO_id], references: [id])
+  meta_SEO           MetaSEO          @relation(fields: [meta_SEO_id], references: [id])
   meta_SEO_id        String
-  created_at         DateTime        @default(now())
-  updated_at         DateTime        @updatedAt
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
   varients           Varient[]
   collections        Collection[]
+  orderedProduct     OrderedProduct[]
 
   @@map("products")
 }
@@ -332,6 +334,7 @@ model VarientProduct {
   id                 String          @id @default(uuid())
   attribute_id       String
   attribute_name     String
+  option             AttributeOption @relation(fields: [option_id], references: [id])
   option_id          String
   varient_id         String
   orderedProduct     OrderedProduct? @relation(fields: [ordered_product_id], references: [id])
@@ -344,6 +347,7 @@ model VarientProduct {
 
 model OrderedProduct {
   id         String           @id @default(uuid())
+  product    Product          @relation(fields: [product_id], references: [id])
   product_id String
   varients   VarientProduct[]
   orders     Order?           @relation(fields: [order_id], references: [id])
