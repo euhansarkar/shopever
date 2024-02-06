@@ -1,16 +1,19 @@
 import { faker } from "@faker-js/faker";
 import prisma from "../../src/shared/prisma";
 
-async function getAttributeGroup(attGroupCount: number){
+async function getMetaSEO(name: string) {
     // meta seo creation for category
-    const metaSEOForCategory = await prisma.metaSEO.create({
+    const metaSEO = await prisma.metaSEO.create({
         data: {
             parent_id: faker.string.uuid(),
             meta_description: faker.lorem.paragraph(),
-            meta_title: faker.lorem.text(),
+            meta_title: name,
             url_key: faker.lorem.sentence(),
         }
     })
 
+    return metaSEO;
 
 }
+
+export const MetaSEOSeeder = { getMetaSEO }

@@ -4,6 +4,7 @@ import prisma from '../src/shared/prisma';
 import { AdminSeeder } from '../seeder/modules/admin';
 import { AttributeGroupSeeder } from '../seeder/modules/attributeGroup';
 import { AttributeSeeder } from '../seeder/modules/attribute';
+import { CategorySeeder } from '../seeder/modules/category';
 
 
 
@@ -22,7 +23,8 @@ async function main() {
     await AttributeGroupSeeder.getAttributeGroup();
     // attribute creation
     await AttributeSeeder.getAttribute();
-
+    // category creation
+    await CategorySeeder.getCategory();
 
 
 }
