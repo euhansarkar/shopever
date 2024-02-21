@@ -11,7 +11,7 @@ async function getCategory(categoryCount: number = 2) {
     // category creation 
     await Promise.all(categories?.map(async category => {
 
-        const metaSEO = await MetaSEOSeeder.getMetaSEO(category);
+        const metaSEO = await MetaSEOSeeder.getMetaSEO(category, "category");
 
         const categoryCreation = await prisma.category.create({
             data: {

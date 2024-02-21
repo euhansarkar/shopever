@@ -1,20 +1,14 @@
-import { faker } from '@faker-js/faker';
 import { ADMIN_COUNT } from '../seeder/_constraint';
 import prisma from '../src/shared/prisma';
 import { AdminSeeder } from '../seeder/modules/admin';
 import { AttributeGroupSeeder } from '../seeder/modules/attributeGroup';
 import { AttributeSeeder } from '../seeder/modules/attribute';
 import { CategorySeeder } from '../seeder/modules/category';
+import { ProductSeeder } from '../seeder/modules/product';
 
 
 
 async function main() {
-
-    // deleting all previously added data
-    // await prisma.user.deleteMany({});
-
-    // deleting all previously management department added data
-    // await prisma.managementDepartment.deleteMany({});
 
 
     // admin creation 
@@ -25,6 +19,8 @@ async function main() {
     await AttributeSeeder.getAttribute();
     // category creation
     await CategorySeeder.getCategory();
+    // product creation
+    await ProductSeeder.getProduct();
 
 
 }

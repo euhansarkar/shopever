@@ -48,8 +48,6 @@ async function getAdmin(adminCount: number) {
 
         const users = await prisma.user.findMany();
 
-        console.log(`users`, users);
-
     }
 
 }

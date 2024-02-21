@@ -1,144 +1,89 @@
 import { faker } from "@faker-js/faker";
 import prisma from "../../src/shared/prisma";
+import { MetaSEOSeeder } from "./metaSEO";
 
-async function getProduct(productCount: number) {
+async function getProduct(productCount: number = 2) {
 
-    // attribute group creation
-    const attributeGroup = await prisma.attributeGroup.create({
-        data: { group_name: "default" }
-    })
+    const categories = await prisma.category.findMany({ include: { Meta_SEO: true, images: true } });
 
-    const getAttGroup = await prisma.attribute.findMany({
-        include: { attribute_options: true }
-    })
+    const attributeGroup = await prisma.attributeGroup.findMany({ include: { attributes: true } });
 
-    // attribute creation
-    const attribute = await prisma.attribute.create({
-        data: {
-            attribute_name: "color",
-            attribute_code: faker.random.alphaNumeric(),
-            type: "multiselect",
-            attribute_group_id: attributeGroup.id,
-            display_on_frontend: faker.datatype.boolean(),
-            is_filterable: faker.datatype.boolean(),
-            is_required: faker.datatype.boolean(),
-            sort_order: faker.number.int(),
-        }
-    });
+    const attributes = await prisma.attribute.findMany({ include: { attribute_options: true } });
 
-    const attribute2 = await prisma.attribute.create({
-        data: {
-            attribute_name: "size",
-            attribute_code: faker.random.alphaNumeric(),
-            type: "multiselect",
-            attribute_group_id: attributeGroup.id,
-            display_on_frontend: faker.datatype.boolean(),
-            is_filterable: faker.datatype.boolean(),
-            is_required: faker.datatype.boolean(),
-            sort_order: faker.number.int(),
-        }
-    });
-
-
-    // attribute option creation
-    const attributeOption = await prisma.attributeOption.create({
-        data: {
-            option_text: faker.color.human(),
-            attribute_id: attribute?.id,
-        }
-    })
-
-
-    enum Category { categoryOne = "man", catgoryTwo = "woman", categoryThree = "baby" }
-
-    // meta seo creation for category
-    const metaSEOForCategory = await prisma.metaSEO.create({
-        data: {
-            parent_id: faker.string.uuid(),
-            meta_description: faker.lorem.paragraph(),
-            meta_title: faker.lorem.text(),
-            url_key: faker.lorem.sentence(),
-        }
-    })
-
+    const products = [faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName()];
 
     // category creation 
-    const category = await prisma.category.create({
-        data: {
-            name: faker.helpers.enumValue(Category),
-            description: faker.lorem.lines(10),
-            include_in_nav: faker.datatype.boolean(),
-            position: faker.number.int(),
-            status: faker.datatype.boolean(),
-            meta_SEO_id: metaSEOForCategory.id,
+    await Promise.all(categories?.map(async category => {
 
-        }
-    })
+        const metaSEO = await MetaSEOSeeder.getMetaSEO(category.name, "product");
 
-    // image creation for category
-    const imageForCategory = await prisma.image.create({
-        data: {
-            image_url: faker.image.avatar(),
-            category_id: category.id
-        }
-    })
+        await Promise.all(products?.map(async product => {
 
-    // meta seo creation for product
-    const metaSEOForProduct = await prisma.metaSEO.create({
-        data: {
-            parent_id: faker.string.uuid(),
-            meta_description: faker.lorem.paragraph(),
-            meta_title: faker.lorem.text(),
-            url_key: faker.lorem.sentence(),
-        }
-    })
+            const newProduct = await prisma.product.create({
+                data: {
+                    name: product,
+                    description: faker.commerce.productDescription(),
+                    attribute_group_id: attributeGroup[0]?.id,
+                    meta_SEO_id: metaSEO.id,
+                    sku: faker.commerce.isbn(),
+                    category_id: category.id,
+                    manage_stock: faker.datatype.boolean(),
+                    stock_availability: faker.datatype.boolean(),
+                    tax_class: faker.datatype.boolean(),
+                }
+            })
 
-    // product creation 
-    const product = await prisma.product.create({
-        data: {
-            name: faker.commerce.productName(),
-            description: faker.commerce.productDescription(),
-            attribute_group_id: attributeGroup.id,
-            meta_SEO_id: metaSEOForProduct.id,
-            sku: faker.commerce.isbn(),
-            category_id: category.id,
-            manage_stock: faker.datatype.boolean(),
-            stock_availability: faker.datatype.boolean(),
-            tax_class: faker.datatype.boolean(),
-        }
-    })
+            const varient = await prisma.varient.create({
+                data: {
+                    sku: faker.commerce.isbn(),
+                    price: parseFloat(faker.commerce.price({ min: 10, max: 299 })),
+                    product_id: newProduct.id,
+                    qty: faker.number.int({ max: 20 }),
+                    visibility: faker.datatype.boolean(),
+                    status: faker.datatype.boolean(),
+                    weight: faker.number.float({ max: 20 }),
+                }
+            })
 
+            // varient option
+            for (let i = 0; i < 3; i++) {
+                await Promise.all(attributes?.map(async attribute => {
 
-    // varient creation 
-    const varient = await prisma.varient.create({
-        data: {
-            sku: faker.commerce.isbn(),
-            price: parseFloat(faker.commerce.price({ min: 10, max: 299 })),
-            product_id: product.id,
-            qty: faker.number.int(),
-            visibility: faker.datatype.boolean(),
-            status: faker.datatype.boolean(),
-            weight: faker.number.float(),
-        }
-    })
+                    const options = attribute.attribute_options?.map(e => e.id);
 
-    // varient option creation 
-    const varientOption = await prisma.varientOption.create({
-        data: {
-            attribute_name: 'value',
-            varient_id: varient.id
-        }
-    })
+                    type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
+                    type EnumEquivalent = { [K in ArrayElement<typeof options>]: K };
+
+                    const enumEquivalent: EnumEquivalent = options.reduce((acc, current) => {
+                        acc[current] = current;
+                        return acc;
+                    }, {} as EnumEquivalent);
 
 
-    // image creation for varient - products
-    const imageForVarient = await prisma.image.create({
-        data: {
-            image_url: faker.image.avatar(),
-            product_id: product.id
-        }
-    })
+                    const varientOption = await prisma.varientOption.create({
+                        data: {
+                            attribute_name: attribute.attribute_name,
+                            varient_id: varient.id,
+                            option_id: faker.helpers.enumValue(enumEquivalent)
+                        }
+                    })
+                }))
+
+
+                const image = await prisma.image.create({
+                    data: {
+                        image_url: faker.image.avatar(),
+                        varient_id: varient.id,
+                        product_id: newProduct.id
+                    }
+                })
+            }
+
+        }))
+
+
+    }))
 
 }
 
-export const AdminSeeder = { getAdmin: getProduct };
+export const ProductSeeder = { getProduct };

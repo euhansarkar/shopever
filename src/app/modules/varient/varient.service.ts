@@ -39,7 +39,6 @@ const createOne = async (req: Request): Promise<Varient | null> => {
 
         //images creation 
         for (const img of images) {
-            console.log(`this is image`, img);
             const data = { image_url: img.secure_url, varient_id: varientCreation.id }
             await transectionClient.image.create({ data });
 
